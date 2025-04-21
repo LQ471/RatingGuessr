@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/highScoreContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_gravity="center"
+    android:elevation="8dp">
+
+  <TextView
+      android:id="@+id/highScoreTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="High Scores"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="8dp" />
+
+  <LinearLayout
+      android:id="@+id/highScoreList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical" />
+
+  <Button
+      android:id="@+id/PlayAgainButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="Play Again" />
+</LinearLayout>
