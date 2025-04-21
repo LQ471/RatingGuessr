@@ -1,29 +1,26 @@
 package com.example.ratingguessr
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 
-class GameViewModel : ViewModel() {
-    private val _highScores = mutableListOf<Int>()
+// Has to be an AndroidViewModel to get the context for the SimpleSQL which requires activity context
+class GameViewModel(application: Application) : AndroidViewModel(application) {
 
-    val highScores: List<Int>
-        get() = _highScores
+    private val dbHelper = SimpleSQL(application.applicationContext)
 
-    // temp function for testing scorelist.
-    fun fillScores() {
-        _highScores.add(1)
-        _highScores.add(2)
-        _highScores.add(3)
-        _highScores.add(4)
-        updateScores(5)
+    init {
+        // Fill DB with sample data when the ViewModel is created
+        dbHelper.fillDB()
     }
 
-    fun updateScores(newScore: Int) {
-        _highScores.add(newScore)
+    // Call this after game finishes
+    // We might need a new fragment for the addScore popup?
+    fun addScore(name: String, score: Int) {
+        dbHelper.insertScore(name, score)
+    }
 
-        _highScores.sortDescending()
-
-        if (_highScores.size > 5) {
-            _highScores.removeAt(_highScores.lastIndex)
-        }
+    // Helper function to return topScores
+    fun getTopScores(): List<HighScore> {
+        return dbHelper.getTopScores()
     }
 }

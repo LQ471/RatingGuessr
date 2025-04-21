@@ -10,7 +10,6 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.gamemain)
 
         val viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-        viewModel.fillScores()
 
         val fragment = HighScoreListFragment()
 
