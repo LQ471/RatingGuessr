@@ -50,4 +50,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Retrofit - For making HTTP network requests
+    implementation(libs.retrofit)
+
+    // Moshi Kotlin - For converting JSON to Kotlin data classes
+    implementation(libs.moshi.kotlin)
+
+    // Retrofit Moshi Converter - Lets Retrofit use Moshi for JSON parsing
+    implementation(libs.converter.moshi)
+
+    // Coil - For loading and displaying images efficiently in ImageViews
+    implementation(libs.coil)
 }
