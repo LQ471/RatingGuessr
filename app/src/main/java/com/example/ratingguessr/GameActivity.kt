@@ -13,8 +13,15 @@ class GameActivity : AppCompatActivity() {
 
         val fragment = HighScoreListFragment()
 
-        supportFragmentManager.beginTransaction()
+        /** supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment, fragment)
+            .addToBackStack(null)
+            .commit() **/
+
+        val gameFragment = GameFragment()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment, gameFragment)
             .addToBackStack(null)
             .commit()
     }
