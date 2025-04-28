@@ -1,23 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp">
+    android:background="#14234A"
+    tools:context=".GameFragment">
 
+    <LinearLayout
+        android:id="@+id/top_boxes"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#1B0934"
+        android:orientation="horizontal"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Left Box -->
+        <FrameLayout
+            android:id="@+id/left_box"
+            android:layout_width="0dp"
+            android:layout_height="260dp"
+            android:layout_weight="1"
+            android:background="#E5AD14">
+
+            <!-- Left Text -->
+            <TextView
+                android:id="@+id/clapboard_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="110dp"
+                android:rotation="-25"
+                android:text="@string/clapboard"
+                android:textColor="#000000"
+                android:textSize="60sp" />
+
+            <TextView
+                android:id="@+id/left_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:paddingBottom="8dp"
+                android:text="Rating"
+                android:textColor="#000000"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Right Box -->
+        <FrameLayout
+            android:id="@+id/right_box"
+            android:layout_width="0dp"
+            android:layout_height="260dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent">
+
+            <!-- Popcorn Emoji -->
+            <TextView
+                android:id="@+id/popcorn_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="110dp"
+                android:layout_marginBottom="8dp"
+                android:rotation="25"
+                android:text="@string/popcorn"
+                android:textColor="#FFFFFF"
+                android:textSize="60sp" />
+
+            <!-- Right Text -->
+            <TextView
+                android:id="@+id/right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:paddingBottom="8dp"
+                android:text="Guessr"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Play Button -->
+
+    <!-- High Scores Button -->
     <TextView
-        android:id="@+id/title_text"
-        android:text="Rating Guessr"
-        android:textSize="32sp"
+        android:id="@+id/textView"
+        android:layout_width="300dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="@string/motivation"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginBottom="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_boxes"
+        app:layout_constraintBottom_toTopOf="@id/highscores_button"/>
 
     <Button
         android:id="@+id/play_button"
+        style="@style/MainButton"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
         android:text="Play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highscores_button"
+        app:layout_constraintVertical_bias="0.221" />
+
+    <Button
+        android:id="@+id/highscores_button"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="188dp"
+        android:background="@drawable/button_highlighter"
+        android:text="Scoreboard"
+        android:textColor="#E5AD14"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

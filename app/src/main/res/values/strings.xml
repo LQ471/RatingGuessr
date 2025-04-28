@@ -50,4 +50,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="motivation">🎥 Two movies. One’s rated higher.\n⚡ Pick fast, score big.\n❌ Wrong or too slow? Game over.\n🏆 Climb the leaderboard!</string>
+    <string name="clapboard">🎬</string>
+    <string name="popcorn">🍿</string>
 </resources>
