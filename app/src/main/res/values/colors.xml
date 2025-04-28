@@ -11,4 +11,6 @@
     <color name="RatingGuessr_Purple">#1B0934</color>
     <color name="RatingGuessr_Yellow">#F9C63A</color>
     <color name="RatingGuessr_ButtonYellow">#E5AD14</color>
+    <color name="RatingGuessr_Blue">#14234A</color>
+    <color name="RatingGuessr_Black">#060B16</color>
 </resources>

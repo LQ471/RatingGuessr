@@ -1,15 +1,19 @@
 package com.example.ratingguessr
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private var score = 0
+private var timer: CountDownTimer? = null
+private val totalTime = 10000L // 10 seconds
+private val interval = 30L // update every 100ms
+private var remainingTime: Long = totalTime
 
 /**
  * A simple [Fragment] subclass.
@@ -17,17 +21,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class GameFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,23 +30,70 @@ class GameFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_game, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GameFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GameFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val answerButton = view.findViewById<Button>(R.id.Answer)
+        val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
+        val nextButton = view.findViewById<Button>(R.id.NextButton)
+        val timeBar = view.findViewById<View>(R.id.timeBar)
+
+        // Initially, set Next button to be unavailable
+        nextButton.alpha = 0.5f // 50% transparency
+        nextButton.isClickable = false // Make it unclickable
+
+        timeBar.post {
+            timeBar.pivotX = 0f  // Left edge of the view
+            timeBar.pivotY = timeBar.height / 2f  // Center vertically
+
+            startTimer(timeBar)  // start the timer *after* pivot is correctly set
+        }
+
+        answerButton.setOnClickListener {
+            // Stop the timer when Answer is pressed
+            timer?.cancel() // Cancel the running timer
+
+            // Get the current progress (remaining time) and update the timeBar
+            val progress = (remainingTime.toFloat() / totalTime)
+            timeBar.scaleX = progress // Adjust scale based on the time left
+
+            // Increase score when Answer is pressed
+            score += 1
+            scoreTextView.text = score.toString()
+
+            answerButton.alpha = 0.5f
+            // Enable the Next button after answering
+            nextButton.alpha = 1f // 100% opacity
+            nextButton.isClickable = true // Make it clickable
+        }
+
+        nextButton.setOnClickListener {
+            // Reset the timer and start again
+            startTimer(timeBar)
+
+            // Optionally, load the next question here if needed
+
+            answerButton.alpha = 1f
+            // Disable the Next button again after it's pressed
+            nextButton.alpha = 0.5f // 50% transparency
+            nextButton.isClickable = false // Make it unclickable
+        }
+    }
+
+    private fun startTimer(timeBar: View) {
+        timer?.cancel() // Cancel existing timer if any
+
+        timer = object : CountDownTimer(totalTime, interval) {
+            override fun onTick(millisUntilFinished: Long) {
+                remainingTime = millisUntilFinished // Store the remaining time
+
+                val progress = millisUntilFinished.toFloat() / totalTime
+                timeBar.scaleX = progress // Shrink horizontally
             }
+
+            override fun onFinish() {
+                timeBar.scaleX = 0f
+            }
+        }.start()
     }
 }

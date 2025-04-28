@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/black" /> <!-- Set the color of the background -->
+    <solid android:color="@color/RatingGuessr_Black" /> <!-- Set the color of the background -->
     <corners
         android:topRightRadius="8dp"
         android:bottomRightRadius="8dp" /> <!-- Set the radius only on the right side -->

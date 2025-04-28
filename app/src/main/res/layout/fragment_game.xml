@@ -8,85 +8,49 @@
     tools:context=".GameFragment">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/rounded_button_background"
-        android:baselineAligned="false"
+        android:id="@+id/ExitButton"
+        style="@style/ExitButtonContainer"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="45dp"
         android:clipToOutline="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/rounded_button_background"
+            style="@style/ExitButtonImage"
             android:clipToOutline="true"
             android:src="@drawable/exit" />
 
         <TextView
-            android:id="@+id/exitText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Exit"
-            android:textColor="@color/RatingGuessr_Green"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            style="@style/ExitButtonText"
+            android:text="Exit" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/rounded_button_background"
-        android:baselineAligned="false"
-        android:clipToOutline="true"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:id="@+id/InGame_Score"
+        style="@style/ScoreButtonContainer"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ExitButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.76"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/ExitButton">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Score"
-            android:textColor="@color/RatingGuessr_Yellow"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            style="@style/InGame_ScoreText"
+            android:text="Score" />
 
         <TextView
-            android:id="@+id/scoreNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="7"
-            android:textColor="@color/RatingGuessr_Yellow"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:id="@+id/SessionScore"
+            style="@style/InGame_ScoreText"
+            android:text="0" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="397dp"
         android:layout_height="67dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/right_rounded_background"
         android:gravity="center"
         android:padding="20dp"
@@ -95,26 +59,25 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
+        app:layout_constraintTop_toBottomOf="@+id/ExitButton" />
 
     <Button
-        android:id="@+id/button8"
-        android:layout_width="108dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="144dp"
-        android:background="@drawable/rounded_button_background_yellow"
-        android:paddingStart="30dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="30dp"
-        android:paddingBottom="0dp"
+        android:id="@+id/Answer"
+        style="@style/MainButton"
+        android:layout_marginBottom="176dp"
+        android:text="Answer"
+        app:layout_constraintBottom_toTopOf="@+id/NextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/NextButton"
+        style="@style/MainButton"
+        android:layout_marginBottom="160dp"
         android:text="Next"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/timeBarContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
