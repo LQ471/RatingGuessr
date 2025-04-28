@@ -16,19 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RatingGuessr"
         tools:targetApi="31" >
+
         <activity
-            android:name=".IntroActivity"
+            android:name=".GameActivity"
             android:exported="true"
-            android:theme="@style/Theme.RatingGuessr" >
+            android:theme="@style/Theme.RatingGuessr">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".GameActivity"
-            android:exported="true" />
+
     </application>
 
 </manifest>

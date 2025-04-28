@@ -24,6 +24,13 @@
       android:orientation="vertical" />
 
   <Button
+      android:id="@+id/ScoresToIntroButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="Homepage" />
+
+  <Button
       android:id="@+id/PlayAgainButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

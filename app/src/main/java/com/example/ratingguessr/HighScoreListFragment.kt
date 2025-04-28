@@ -39,10 +39,15 @@ class HighScoreListFragment : Fragment() {
             scoreListLayout.addView(scoreView)
         }
 
+        val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
+        val homepageButton = view.findViewById<Button>(R.id.ScoresToIntroButton)
 
-        view.findViewById<Button>(R.id.PlayAgainButton)?.setOnClickListener {
-            val intent = Intent(requireContext(), IntroActivity::class.java)
-            startActivity(intent)
+        playAgainButton.setOnClickListener {
+            (activity as? GameActivity)?.navigateToGameFragment()
+        }
+
+        homepageButton.setOnClickListener {
+            (activity as? GameActivity)?.navigateToIntroFragment()
         }
     }
 }

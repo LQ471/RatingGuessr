@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 
 class GameActivity : AppCompatActivity() {
-
     private val movieRepository = MovieRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gamemain)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment, IntroFragment())
+                .commit()
+        }
 
         movieRepository.getRandomPopularMovie(
             onSuccess = { movie ->
@@ -28,14 +33,40 @@ class GameActivity : AppCompatActivity() {
         val fragment = HighScoreListFragment()
 
         /** supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment, fragment)
-            .addToBackStack(null)
-            .commit() **/
+        .replace(R.id.main_fragment, fragment)
+        .addToBackStack(null)
+        .commit() **/
 
+        val gameFragment = GameFragment()
+    }
+
+    /** fragment navigation functions
+     *
+     */
+
+    fun navigateToGameFragment() {
         val gameFragment = GameFragment()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment, gameFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun navigateToScoreFragment() {
+        val scoreFragment = HighScoreListFragment()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment, scoreFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun navigateToIntroFragment() {
+        val introFragment = IntroFragment()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment, introFragment)
             .addToBackStack(null)
             .commit()
     }

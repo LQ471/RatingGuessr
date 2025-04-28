@@ -37,6 +37,11 @@ class GameFragment : Fragment() {
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
         val nextButton = view.findViewById<Button>(R.id.NextButton)
         val timeBar = view.findViewById<View>(R.id.timeBar)
+        val exitButton = view.findViewById<View>(R.id.ExitButton)
+
+        exitButton.setOnClickListener {
+            (activity as? GameActivity)?.navigateToIntroFragment()
+        }
 
         // Initially, set Next button to be unavailable
         nextButton.alpha = 0.5f // 50% transparency
