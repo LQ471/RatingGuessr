@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="RatingGuessr_Green">#00AF6B</color>
+    <color name="RatingGuessr_Purple">#1B0934</color>
+    <color name="RatingGuessr_Yellow">#F9C63A</color>
+    <color name="RatingGuessr_ButtonYellow">#E5AD14</color>
+    <color name="RatingGuessr_Blue">#14234A</color>
+    <color name="RatingGuessr_Black">#060B16</color>
 </resources>
