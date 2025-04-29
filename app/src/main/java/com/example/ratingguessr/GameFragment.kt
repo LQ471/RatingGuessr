@@ -1,9 +1,8 @@
 package com.example.ratingguessr
 
-import android.media.Image
+
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +15,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import coil.load
-import org.w3c.dom.Text
+import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private var score = 0
 private var timer: CountDownTimer? = null
 private val totalTime = 10000L // 10 seconds
 private val interval = 30L // update every 100ms
 private var remainingTime: Long = totalTime
+private var winningMovie = -1
+private var selectedMovie = -1
 
 /**
  * A simple [Fragment] subclass.
@@ -30,6 +34,8 @@ private var remainingTime: Long = totalTime
  * create an instance of this fragment.
  */
 class GameFragment : Fragment() {
+
+    private lateinit var gameViewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +48,7 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
+        gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
 
         val answerButton = view.findViewById<Button>(R.id.AnswerButton)
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
@@ -78,10 +84,51 @@ class GameFragment : Fragment() {
             movie2TitleTextView.text = movie2.title
             movie2YearTextView.text = movie2.releaseYear
             movie2RatingTextView.text = movie2.voteAverageString
+
+            winningMovie = if (movie1.voteAverage > movie2.voteAverage)  {
+                1
+            } else 2
         }
 
         // Triggering fetching of the data in the viewModel
-        gameViewModel.loadTwoDistinctMovies()
+        fetchMovies()
+
+        val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
+        val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+
+        // Initially, set Answer button to be unavailable
+        answerButton.alpha = 0.5f // 50% transparency
+        answerButton.isClickable = false // Make it unclickable
+
+        movie1ImageButton.setOnClickListener {
+            selectedMovie = 1
+
+            if (movie1ImageButton.background == yellowBorder) {
+                movie1ImageButton.background = originalBackground
+            } else {
+                movie1ImageButton.background = yellowBorder
+                movie2ImageButton.background = originalBackground
+            }
+
+            // Make answer button clickable after selecting movie:
+            answerButton.alpha = 1f // 50% transparency
+            answerButton.isClickable = true // Make it unclickable
+        }
+
+        movie2ImageButton.setOnClickListener {
+            selectedMovie = 2
+
+            if (movie2ImageButton.background == yellowBorder) {
+                movie2ImageButton.background = originalBackground
+            } else {
+                movie2ImageButton.background = yellowBorder
+                movie1ImageButton.background = originalBackground
+            }
+
+            // Make answer button clickable after selecting movie:
+            answerButton.alpha = 1f // 50% transparency
+            answerButton.isClickable = true // Make it unclickable
+        }
 
         // Initially, set Next button to be unavailable
         nextButton.alpha = 0.5f // 50% transparency
@@ -103,8 +150,27 @@ class GameFragment : Fragment() {
             timeBar.scaleX = progress // Adjust scale based on the time left
 
             // Increase score when Answer is pressed
-            score += 1
+            if (selectedMovie == winningMovie) score += 1
+            else {
+                val redColor = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
+                if (selectedMovie == 1) {
+                    movie1RatingTextView.setTextColor(redColor)
+                    movie1ImageButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
+                }
+                else if (selectedMovie == 2) {
+                    movie2RatingTextView.setTextColor(redColor)
+                    movie2ImageButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
+                }
+                showGameOverPopUp()
+            }
+
             scoreTextView.text = score.toString()
+
+            // Make ratings visible:
+            movie1RatingTextView.visibility = View.VISIBLE
+            movie2RatingTextView.visibility = View.VISIBLE
+            movie1ImageButton.isClickable = false
+            movie2ImageButton.isClickable = false
 
             answerButton.alpha = 0.5f
             // Enable the Next button after answering
@@ -116,24 +182,44 @@ class GameFragment : Fragment() {
             // Reset the timer and start again
             startTimer(timeBar)
 
-            // Optionally, load the next question here if needed
+            // Preparing for next movie.
+            movie1RatingTextView.visibility = View.INVISIBLE
+            movie2RatingTextView.visibility = View.INVISIBLE
+            movie1ImageButton.isClickable = true
+            movie2ImageButton.isClickable = true
+            movie1ImageButton.background = originalBackground
+            movie1ImageButton.background = originalBackground
 
-            answerButton.alpha = 1f
+            answerButton.alpha = 0.5f // 50% transparency
+            answerButton.isClickable = false // Make it unclickable
+
             // Disable the Next button again after it's pressed
             nextButton.alpha = 0.5f // 50% transparency
             nextButton.isClickable = false // Make it unclickable
+
+            // Fetch the next movies to display:
+            fetchMovies()
         }
     }
 
+    // Reset score if fragment is left
+    override fun onDestroyView() {
+        super.onDestroyView()
+        score = 0
+    }
+
     private fun showGameOverPopUp() {
-        val score = score.toString() // Get the score to pass to the pop-up fragment
+        lifecycleScope.launch {
+            val scoreString = score.toString() // Get the score to pass to the pop-up fragment
+            score = 0
+            delay(2000L)
+            // Create a new instance of GameOverPopUp and pass the score
+            // val gameOverFragment = GameOverPopUp.newInstance(scoreString)
 
-        // Create a new instance of GameOverPopUp and pass the score
-        val gameOverFragment = GameOverPopUp.newInstance(score)
-
-        // Show the DialogFragment
-        // gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
-        findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+            // Show the DialogFragment
+            // gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
+            findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+        }
     }
 
     private fun startTimer(timeBar: View) {
@@ -152,5 +238,9 @@ class GameFragment : Fragment() {
                 showGameOverPopUp()
             }
         }.start()
+    }
+
+    private fun fetchMovies() {
+        gameViewModel.loadTwoDistinctMovies()
     }
 }

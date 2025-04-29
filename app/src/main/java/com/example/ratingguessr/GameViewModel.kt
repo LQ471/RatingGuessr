@@ -16,8 +16,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _moviePair = MutableLiveData<Pair<Movie, Movie>>()
     val moviePair: LiveData<Pair<Movie, Movie>> = _moviePair
 
-
-
     init {
         // Fill DB with sample data when the ViewModel is created
         dbHelper.fillDB()
