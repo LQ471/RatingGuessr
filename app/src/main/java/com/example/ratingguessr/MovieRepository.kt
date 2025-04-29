@@ -1,11 +1,13 @@
 package com.example.ratingguessr
 
+import android.util.Log
 import com.example.ratingguessr.networking.ApiClient
 import com.example.ratingguessr.networking.Movie
 import com.example.ratingguessr.networking.MovieResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 class MovieRepository {
 
@@ -27,6 +29,7 @@ class MovieRepository {
                     val movies = response.body()?.results ?: emptyList()
                     if (movies.isNotEmpty()) {
                         val randomMovie = movies.random()
+                        Log.d("", randomMovie.title + " " + randomMovie.fullPosterUrl)
                         onSuccess(randomMovie)
                     } else {
                         onError(Throwable("No movies found on page $randomPage"))

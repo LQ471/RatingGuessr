@@ -61,24 +61,89 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ExitButton" />
 
+    <ImageButton
+        android:id="@+id/imageButtonMovie1"
+        style="@style/MovieImageButton"
+        android:contentDescription="Movie poster 1"
+        app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/titleMovie1"
+        style="@style/MovieTitleTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonMovie1" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie1"
+        style="@style/MovieYearTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@+id/titleMovie1" />
+
+    <TextView
+        android:id="@+id/ratingMovie1"
+        style="@style/MovieRatingTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@+id/releaseYearMovie1" />
+
+    <ImageButton
+        android:id="@+id/imageButtonMovie2"
+        style="@style/MovieImageButton"
+        android:contentDescription="Movie poster 2"
+        app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/titleMovie2"
+        style="@style/MovieTitleTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonMovie2" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie2"
+        style="@style/MovieYearTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@+id/titleMovie2" />
+
+    <TextView
+        android:id="@+id/ratingMovie2"
+        style="@style/MovieRatingTextView"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@+id/releaseYearMovie2" />
+
     <Button
-        android:id="@+id/Answer"
+        android:id="@+id/AnswerButton"
         style="@style/MainButton"
-        android:layout_marginBottom="176dp"
+        android:layout_marginTop="20dp"
         android:text="Answer"
-        app:layout_constraintBottom_toTopOf="@+id/NextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingMovie1" />
+
+        <!-- app:layout_constraintBottom_toTopOf="@+id/NextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" /> -->
 
     <Button
         android:id="@+id/NextButton"
         style="@style/MainButton"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="50dp"
         android:text="Next"
-        app:layout_constraintBottom_toTopOf="@+id/timeBarContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AnswerButton" />
 
     <FrameLayout
         android:id="@+id/timeBarContainer"

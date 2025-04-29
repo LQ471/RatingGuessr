@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 
 class GameActivity : AppCompatActivity() {
-    private val movieRepository = MovieRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,16 +16,6 @@ class GameActivity : AppCompatActivity() {
                 .replace(R.id.main_fragment, IntroFragment())
                 .commit()
         }
-
-        movieRepository.getRandomPopularMovie(
-            onSuccess = { movie ->
-                Log.d("Random Movie ", "${movie.title}, ${movie.releaseYear}")
-            },
-            onError = { error ->
-                Log.e("Movie Fetch Failed", error.message ?: "Unknown error")
-            }
-        )
-
 
         val viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
