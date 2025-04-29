@@ -93,8 +93,7 @@
             android:paddingBottom="0dp"
             android:text="Home page"
             android:textColor="#E5AD14"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="20sp"/>
 
         <Button
             android:id="@+id/PlayAgainButton"
