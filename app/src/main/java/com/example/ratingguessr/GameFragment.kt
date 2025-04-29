@@ -80,6 +80,16 @@ class GameFragment : Fragment() {
         }
     }
 
+    private fun showGameOverPopUp() {
+        val score = score.toString() // Get the score to pass to the pop-up fragment
+
+        // Create a new instance of GameOverPopUp and pass the score
+        val gameOverFragment = GameOverPopUp.newInstance(score)
+
+        // Show the DialogFragment
+        gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
+    }
+
     private fun startTimer(timeBar: View) {
         timer?.cancel() // Cancel existing timer if any
 
@@ -93,6 +103,7 @@ class GameFragment : Fragment() {
 
             override fun onFinish() {
                 timeBar.scaleX = 0f
+                showGameOverPopUp()
             }
         }.start()
     }
