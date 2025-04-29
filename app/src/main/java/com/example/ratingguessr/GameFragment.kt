@@ -1,6 +1,5 @@
 package com.example.ratingguessr
 
-
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
@@ -20,13 +19,13 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private var score = 0
 private var timer: CountDownTimer? = null
 private val totalTime = 10000L // 10 seconds
 private val interval = 30L // update every 100ms
 private var remainingTime: Long = totalTime
 private var winningMovie = -1
 private var selectedMovie = -1
+private var hasNavigatedToGameOver = false
 
 /**
  * A simple [Fragment] subclass.
@@ -85,9 +84,11 @@ class GameFragment : Fragment() {
             movie2YearTextView.text = movie2.releaseYear
             movie2RatingTextView.text = movie2.voteAverageString
 
-            winningMovie = if (movie1.voteAverage > movie2.voteAverage)  {
-                1
-            } else 2
+            winningMovie = if (movie1.voteAverage > movie2.voteAverage) 1 else 2
+        }
+
+        gameViewModel.score.observe(viewLifecycleOwner) {
+            scoreTextView.text = it.toString()
         }
 
         // Triggering fetching of the data in the viewModel
@@ -96,10 +97,11 @@ class GameFragment : Fragment() {
         val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
         val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
 
-        // Initially, set Answer button to be unavailable
-        answerButton.alpha = 0.5f // 50% transparency
-        answerButton.isClickable = false // Make it unclickable
+        // Initially, set Answer and Next buttons to be unavailable
+        disableButton(answerButton)
+        disableButton(nextButton)
 
+        // Add border to chosen movie and make "Answer" button clickable
         movie1ImageButton.setOnClickListener {
             selectedMovie = 1
 
@@ -110,11 +112,10 @@ class GameFragment : Fragment() {
                 movie2ImageButton.background = originalBackground
             }
 
-            // Make answer button clickable after selecting movie:
-            answerButton.alpha = 1f // 50% transparency
-            answerButton.isClickable = true // Make it unclickable
+            enableButton(answerButton)
         }
 
+        // Add border to chosen movie and make "Answer" button clickable
         movie2ImageButton.setOnClickListener {
             selectedMovie = 2
 
@@ -125,14 +126,8 @@ class GameFragment : Fragment() {
                 movie1ImageButton.background = originalBackground
             }
 
-            // Make answer button clickable after selecting movie:
-            answerButton.alpha = 1f // 50% transparency
-            answerButton.isClickable = true // Make it unclickable
+            enableButton(answerButton)
         }
-
-        // Initially, set Next button to be unavailable
-        nextButton.alpha = 0.5f // 50% transparency
-        nextButton.isClickable = false // Make it unclickable
 
         timeBar.post {
             timeBar.pivotX = 0f  // Left edge of the view
@@ -150,21 +145,30 @@ class GameFragment : Fragment() {
             timeBar.scaleX = progress // Adjust scale based on the time left
 
             // Increase score when Answer is pressed
-            if (selectedMovie == winningMovie) score += 1
-            else {
-                val redColor = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
-                if (selectedMovie == 1) {
-                    movie1RatingTextView.setTextColor(redColor)
-                    movie1ImageButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
-                }
-                else if (selectedMovie == 2) {
-                    movie2RatingTextView.setTextColor(redColor)
-                    movie2ImageButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
-                }
-                showGameOverPopUp()
+            if (selectedMovie == winningMovie) {
+                gameViewModel.addToScore()
+                enableButton(nextButton)
             }
+            else {
+                lifecycleScope.launch {
+                    val redColor =
+                        ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
+                    if (selectedMovie == 1) {
+                        movie1RatingTextView.setTextColor(redColor)
+                        movie1ImageButton.background =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
+                    } else if (selectedMovie == 2) {
+                        movie2RatingTextView.setTextColor(redColor)
+                        movie2ImageButton.background =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
+                    }
 
-            scoreTextView.text = score.toString()
+                    // Delay set to allow the user to see ratings before the game over pop-up appears
+                    delay(2000L)
+                    showGameOverPopUp()
+                }
+                disableButton(nextButton)
+            }
 
             // Make ratings visible:
             movie1RatingTextView.visibility = View.VISIBLE
@@ -172,10 +176,8 @@ class GameFragment : Fragment() {
             movie1ImageButton.isClickable = false
             movie2ImageButton.isClickable = false
 
-            answerButton.alpha = 0.5f
-            // Enable the Next button after answering
-            nextButton.alpha = 1f // 100% opacity
-            nextButton.isClickable = true // Make it clickable
+            // Disabled to only allow answering once
+            disableButton(answerButton)
         }
 
         nextButton.setOnClickListener {
@@ -188,38 +190,32 @@ class GameFragment : Fragment() {
             movie1ImageButton.isClickable = true
             movie2ImageButton.isClickable = true
             movie1ImageButton.background = originalBackground
-            movie1ImageButton.background = originalBackground
+            movie2ImageButton.background = originalBackground
 
-            answerButton.alpha = 0.5f // 50% transparency
-            answerButton.isClickable = false // Make it unclickable
-
-            // Disable the Next button again after it's pressed
-            nextButton.alpha = 0.5f // 50% transparency
-            nextButton.isClickable = false // Make it unclickable
+            // Disable buttons
+            disableButton(nextButton)
+            disableButton(answerButton)
 
             // Fetch the next movies to display:
             fetchMovies()
         }
     }
 
-    // Reset score if fragment is left
+    // Reset setup if fragment is destroyed
     override fun onDestroyView() {
         super.onDestroyView()
-        score = 0
+        gameViewModel.resetScore()
+        hasNavigatedToGameOver = false
     }
 
     private fun showGameOverPopUp() {
-        lifecycleScope.launch {
-            val scoreString = score.toString() // Get the score to pass to the pop-up fragment
-            score = 0
-            delay(2000L)
-            // Create a new instance of GameOverPopUp and pass the score
-            // val gameOverFragment = GameOverPopUp.newInstance(scoreString)
+        if (hasNavigatedToGameOver) return
+        hasNavigatedToGameOver = true
 
-            // Show the DialogFragment
-            // gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
-            findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
-        }
+        // Preventing the timer from triggering another call to showGameOverPopUp() when it runs out
+        timer?.cancel()
+
+        findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
     }
 
     private fun startTimer(timeBar: View) {
@@ -243,4 +239,15 @@ class GameFragment : Fragment() {
     private fun fetchMovies() {
         gameViewModel.loadTwoDistinctMovies()
     }
+
+    private fun disableButton(button: Button) {
+        button.alpha = 0.5f // 50% transparency
+        button.isClickable = false
+    }
+
+    private fun enableButton(button: Button) {
+        button.alpha = 1f // 100% opacity
+        button.isClickable = true
+    }
+
 }

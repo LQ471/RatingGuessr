@@ -16,6 +16,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _moviePair = MutableLiveData<Pair<Movie, Movie>>()
     val moviePair: LiveData<Pair<Movie, Movie>> = _moviePair
 
+    private val _score = MutableLiveData(0)
+    val score: LiveData<Int> = _score
+
+    private val _winningMovie = MutableLiveData<Int>()
+    val winningMovie: LiveData<Int> get() = _winningMovie
+
+    private val _selectedMovie = MutableLiveData<Int>()
+    val selectedMovie: LiveData<Int> get() = _selectedMovie
+
     init {
         // Fill DB with sample data when the ViewModel is created
         dbHelper.fillDB()
@@ -34,6 +43,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                             loadTwoDistinctMovies(retryCount + 1)
                         } else {
                             _moviePair.postValue(Pair(movie1, movie2))
+                            _winningMovie.value = determineWinningMovie(movie1, movie2)
                         }
                     },
                     onError = { Log.e("GameViewModel", "Fetching Movie 2 failed")}
@@ -41,6 +51,27 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             },
             onError = { Log.e("GameViewModel", "Fetching Movie 2 failed") }
         )
+
+    }
+
+    private fun determineWinningMovie(movie1: Movie, movie2: Movie): Int {
+        return if (movie1.voteAverage > movie2.voteAverage) 1 else 2
+    }
+
+    fun setSelectedMovie(index: Int) {
+        _selectedMovie.value = index
+    }
+
+    fun setWinningMovie(index: Int) {
+        _winningMovie.value = index
+    }
+
+    fun addToScore() {
+        _score.value = (_score.value ?: 0) + 1
+    }
+
+    fun resetScore() {
+        _score.value = 0
     }
 
     // Call this after game finishes
