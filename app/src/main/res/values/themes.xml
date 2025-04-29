@@ -64,10 +64,11 @@
 
     <!-- Styling for movie display -->
     <style name="MovieImageButton">
-        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_width">151dp</item>
         <item name="android:layout_height">225dp</item>
+        <item name="android:padding">4dp</item>
         <item name="android:background">@color/RatingGuessr_Blue</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item name="android:scaleType">centerInside</item>
         <item name="android:layout_marginBottom">30dp</item>
     </style>
 
@@ -77,8 +78,9 @@
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:text">Movie Title</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="MovieYearTextView">
@@ -86,7 +88,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">Year of release</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">10dp</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:paddingBottom">12dp</item>
     </style>
 
     <style name="MovieRatingTextView">
@@ -94,10 +97,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">Rating</item>
         <item name="android:textColor">@color/RatingGuessr_Yellow</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:visibility">visible</item>
+        <item name="android:visibility">invisible</item>
+
     </style>
 
 

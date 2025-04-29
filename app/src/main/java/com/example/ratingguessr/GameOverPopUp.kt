@@ -29,28 +29,6 @@ class GameOverPopUp : DialogFragment() {
         return inflater.inflate(R.layout.fragment_game_over_pop_up, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
-        scoreTextView.text = score  // Display the score passed from the GameFragment
-
-        val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
-        val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
-
-        // Play again button click listener
-        playAgainButton.setOnClickListener {
-            // Handle restart of the game
-            restartGame()
-        }
-
-        // Front page button click listener
-        frontPageButton.setOnClickListener {
-            // Handle going back to the front page
-            goToFrontPage()
-        }
-    }
-
     // Method to restart the game (replace this with actual restart logic)
     private fun restartGame() {
         dismiss()  // Dismiss the pop-up
@@ -73,7 +51,27 @@ class GameOverPopUp : DialogFragment() {
     // Optionally, override onCreateDialog to customize the dialog appearance
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(requireActivity().layoutInflater.inflate(R.layout.fragment_game_over_pop_up, null))
+        val view = requireActivity().layoutInflater.inflate(R.layout.fragment_game_over_pop_up, null)
+
+        val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
+        scoreTextView.text = score  // Display the score passed from the GameFragment
+
+        val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
+        val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
+
+        // Play again button click listener
+        playAgainButton.setOnClickListener {
+            // Handle restart of the game
+            restartGame()
+        }
+
+        // Front page button click listener
+        frontPageButton.setOnClickListener {
+            // Handle going back to the front page
+            goToFrontPage()
+        }
+
+        builder.setView(view)
 
         // Make the dialog non-cancelable (i.e., prevent closing when clicking on background)
         val dialog = builder.create()

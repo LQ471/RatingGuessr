@@ -46,18 +46,24 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="397dp"
+    <!-- AppCompatTextview for backwards compability for autosize -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/question"
+        android:layout_width="0dp"
         android:layout_height="67dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="30dp"
+        android:autoSizeMaxTextSize="24sp"
+        android:autoSizeMinTextSize="18sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:background="@drawable/right_rounded_background"
         android:gravity="center"
-        android:padding="20dp"
+        android:padding="15dp"
         android:text="Which movie has the highest rating?"
         android:textColor="@color/white"
-        android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ExitButton" />
 
@@ -68,7 +74,7 @@
         app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonMovie2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/question" />
 
     <TextView
         android:id="@+id/titleMovie1"
@@ -87,9 +93,10 @@
     <TextView
         android:id="@+id/ratingMovie1"
         style="@style/MovieRatingTextView"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButtonMovie1"
         app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
-        app:layout_constraintTop_toBottomOf="@+id/releaseYearMovie1" />
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1" />
 
     <ImageButton
         android:id="@+id/imageButtonMovie2"
@@ -98,7 +105,7 @@
         app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageButtonMovie1"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/question" />
 
     <TextView
         android:id="@+id/titleMovie2"
@@ -117,23 +124,19 @@
     <TextView
         android:id="@+id/ratingMovie2"
         style="@style/MovieRatingTextView"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButtonMovie2"
         app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
-        app:layout_constraintTop_toBottomOf="@+id/releaseYearMovie2" />
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2" />
 
     <Button
         android:id="@+id/AnswerButton"
         style="@style/MainButton"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
         android:text="Answer"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingMovie1" />
-
-        <!-- app:layout_constraintBottom_toTopOf="@+id/NextButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" /> -->
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/NextButton"
@@ -142,8 +145,7 @@
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AnswerButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
         android:id="@+id/timeBarContainer"
@@ -161,6 +163,5 @@
             android:background="@color/RatingGuessr_Yellow" /> <!-- this is the shrinking bar -->
 
     </FrameLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
