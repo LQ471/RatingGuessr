@@ -1,6 +1,5 @@
 package com.example.ratingguessr
 
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
@@ -8,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 class GameOverPopUp : DialogFragment() {
 
@@ -25,7 +25,6 @@ class GameOverPopUp : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game_over_pop_up, container, false)
     }
 
@@ -33,33 +32,28 @@ class GameOverPopUp : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
-        scoreTextView.text = score  // Display the score passed from the GameFragment
+        scoreTextView.text = score
 
         val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
         val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
 
-        // Play again button click listener
         playAgainButton.setOnClickListener {
-            // Handle restart of the game
-            restartGame()
+            findNavController().navigate(R.id.action_gameOverPopUp_to_gameFragment)
         }
 
-        // Front page button click listener
         frontPageButton.setOnClickListener {
-            // Handle going back to the front page
-            goToFrontPage()
+            findNavController().navigate(R.id.action_gameOverPopUp_to_introFragment)
         }
     }
 
-    // Method to restart the game (replace this with actual restart logic)
-    private fun restartGame() {
-        dismiss()  // Dismiss the pop-up
-        // You can restart the game here (e.g., reset score, restart timer, etc.)
-    }
-
-    // Method to navigate to the front page
-    private fun goToFrontPage() {
-        // Replace this with actual navigation logic to the front page
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setCancelable(false)
     }
 
     companion object {
@@ -68,16 +62,5 @@ class GameOverPopUp : DialogFragment() {
                 putString("score", score)
             }
         }
-    }
-
-    // Optionally, override onCreateDialog to customize the dialog appearance
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(requireActivity().layoutInflater.inflate(R.layout.fragment_game_over_pop_up, null))
-
-        // Make the dialog non-cancelable (i.e., prevent closing when clicking on background)
-        val dialog = builder.create()
-        dialog.setCanceledOnTouchOutside(false) // This prevents the dialog from closing when background is clicked
-        return dialog
     }
 }

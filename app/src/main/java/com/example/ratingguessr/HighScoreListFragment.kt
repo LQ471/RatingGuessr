@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 
 class HighScoreListFragment : Fragment() {
 
@@ -43,11 +44,12 @@ class HighScoreListFragment : Fragment() {
         val homepageButton = view.findViewById<Button>(R.id.ScoresToIntroButton)
 
         playAgainButton.setOnClickListener {
-            (activity as? GameActivity)?.navigateToGameFragment()
+            //(activity as? GameActivity)?.navigateToGameFragment()
+            view.findNavController().navigate(R.id.action_highScoreListFragment_to_gameFragment)
         }
 
         homepageButton.setOnClickListener {
-            (activity as? GameActivity)?.navigateToIntroFragment()
+            view.findNavController().navigate(R.id.action_highScoreListFragment_to_introFragment)
         }
     }
 }

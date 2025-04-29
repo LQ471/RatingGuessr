@@ -3,26 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/introFragment">
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.ratingguessr.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first" >
-
+        android:id="@+id/introFragment"
+        android:name="com.example.ratingguessr.IntroFragment"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_introFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_introFragment_to_highScoreListFragment"
+            app:destination="@id/highScoreListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.ratingguessr.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second" >
-
+        android:id="@+id/gameFragment"
+        android:name="com.example.ratingguessr.GameFragment"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_gameFragment_to_gameOverPopUp"
+            app:destination="@id/gameOverPopUp" />
+        <action
+            android:id="@+id/action_gameFragment_to_introFragment"
+            app:destination="@id/introFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/highScoreListFragment"
+        android:name="com.example.ratingguessr.HighScoreListFragment"
+        android:label="HighScoreListFragment" >
+        <action
+            android:id="@+id/action_highScoreListFragment_to_introFragment"
+            app:destination="@id/introFragment" />
+        <action
+            android:id="@+id/action_highScoreListFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/gameOverPopUp"
+        android:name="com.example.ratingguessr.GameOverPopUp"
+        android:label="GameOverPopUp" >
+        <action
+            android:id="@+id/action_gameOverPopUp_to_highScoreListFragment"
+            app:destination="@id/highScoreListFragment" />
+        <action
+            android:id="@+id/action_gameOverPopUp_to_introFragment"
+            app:destination="@id/introFragment" />
+        <action
+            android:id="@+id/action_gameOverPopUp_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </dialog>
 </navigation>

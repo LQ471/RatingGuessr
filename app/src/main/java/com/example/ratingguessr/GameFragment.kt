@@ -13,6 +13,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import coil.load
 import org.w3c.dom.Text
 
@@ -49,7 +51,8 @@ class GameFragment : Fragment() {
         val exitButton = view.findViewById<View>(R.id.ExitButton)
 
         exitButton.setOnClickListener {
-            (activity as? GameActivity)?.navigateToIntroFragment()
+            // (activity as? GameActivity)?.navigateToIntroFragment()
+            view.findNavController().navigate(R.id.action_gameFragment_to_introFragment)
         }
 
         //  Layout elements for movie on left side
@@ -129,7 +132,8 @@ class GameFragment : Fragment() {
         val gameOverFragment = GameOverPopUp.newInstance(score)
 
         // Show the DialogFragment
-        gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
+        // gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
+        findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
     }
 
     private fun startTimer(timeBar: View) {
