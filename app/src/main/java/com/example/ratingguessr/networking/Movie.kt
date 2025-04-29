@@ -20,6 +20,8 @@ data class Movie(
     // Release year is extracted from release_date.
     val releaseYear: String
         get() = releaseDate.let { releaseDate.substring(0, 4) }
+    val voteAverageString: String
+        get() = String.format("%.1f", voteAverage)
 }
 
 data class MovieResponse(@Json(name="results")

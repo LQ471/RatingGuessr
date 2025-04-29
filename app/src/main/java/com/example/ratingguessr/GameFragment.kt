@@ -1,13 +1,20 @@
 package com.example.ratingguessr
 
+import android.media.Image
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import coil.load
+import org.w3c.dom.Text
 
 private var score = 0
 private var timer: CountDownTimer? = null
@@ -33,10 +40,40 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val answerButton = view.findViewById<Button>(R.id.Answer)
+        val gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
+
+        val answerButton = view.findViewById<Button>(R.id.AnswerButton)
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
         val nextButton = view.findViewById<Button>(R.id.NextButton)
         val timeBar = view.findViewById<View>(R.id.timeBar)
+
+        //  Layout elements for movie on left side
+        val movie1ImageButton = view.findViewById<ImageButton>(R.id.imageButtonMovie1)
+        val movie1TitleTextView = view.findViewById<TextView>(R.id.titleMovie1)
+        val movie1YearTextView = view.findViewById<TextView>(R.id.releaseYearMovie1)
+        val movie1RatingTextView = view.findViewById<TextView>(R.id.ratingMovie1)
+
+        //  Layout elements for movie on right side
+        val movie2ImageButton = view.findViewById<ImageButton>(R.id.imageButtonMovie2)
+        val movie2TitleTextView = view.findViewById<TextView>(R.id.titleMovie2)
+        val movie2YearTextView = view.findViewById<TextView>(R.id.releaseYearMovie2)
+        val movie2RatingTextView = view.findViewById<TextView>(R.id.ratingMovie2)
+
+        // Setting the layout through API calls in the ViewModel
+        gameViewModel.moviePair.observe(viewLifecycleOwner) { (movie1, movie2) ->
+            movie1ImageButton.load(movie1.fullPosterUrl)
+            movie1TitleTextView.text = movie1.title
+            movie1YearTextView.text = movie1.releaseYear
+            movie1RatingTextView.text = movie1.voteAverageString
+
+            movie2ImageButton.load(movie2.fullPosterUrl)
+            movie2TitleTextView.text = movie2.title
+            movie2YearTextView.text = movie2.releaseYear
+            movie2RatingTextView.text = movie2.voteAverageString
+        }
+
+        // Triggering fetching of the data in the viewModel
+        gameViewModel.loadTwoDistinctMovies()
 
         // Initially, set Next button to be unavailable
         nextButton.alpha = 0.5f // 50% transparency
