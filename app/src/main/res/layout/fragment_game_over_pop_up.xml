@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pop_up_rounded_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:topRightRadius="8dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="50dp">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Game over"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/InGame_Score"
+            style="@style/ScoreButtonContainer"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                style="@style/InGame_ScoreText"
+                android:text="Score" />
+
+            <TextView
+                android:id="@+id/SessionScore"
+                style="@style/InGame_ScoreText"
+                android:text="5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/registerQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Want to register your score?"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/playerNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_white_background"
+                android:backgroundTint="@color/white"
+                android:hint="Enter your name"
+                android:padding="8dp"
+                android:textColorHint="#676767"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:inputType="text"
+                android:singleLine="true"
+                android:maxLength="20"/>
+
+            <Button
+                android:id="@+id/submitScoreButton"
+                style="@style/MainButton"
+                android:layout_marginTop="16dp"
+                android:text="Submit" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/FrontPageButton"
+            style="@style/MainButton"
+            android:layout_marginTop="16dp"
+            android:text="Front page" />
+
+        <Button
+            android:id="@+id/PlayAgainButton"
+            style="@style/MainButton"
+            android:layout_marginTop="16dp"
+            android:text="Play again" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

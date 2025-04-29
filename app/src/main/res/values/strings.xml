@@ -53,6 +53,4 @@
     <string name="motivation">🎥 Two movies. One’s rated higher.\n⚡ Pick fast, score big.\n❌ Wrong or too slow? Game over.\n🏆 Climb the leaderboard!</string>
     <string name="clapboard">🎬</string>
     <string name="popcorn">🍿</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
