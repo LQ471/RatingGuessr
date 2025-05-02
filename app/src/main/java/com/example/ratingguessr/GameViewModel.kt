@@ -10,6 +10,15 @@ import android.util.Log
 // Has to be an AndroidViewModel to get the context for the SimpleSQL which requires activity context
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
+    // Class to handle evaluation
+    sealed class AnswerResult {
+        data object Correct : AnswerResult()
+        data object Incorrect : AnswerResult()
+    }
+
+    private val _answerResult = MutableLiveData<AnswerResult?>()
+    val answerResult: LiveData<AnswerResult?> = _answerResult
+
     private val movieRepository = MovieRepository()
     private val dbHelper = SimpleSQL(application.applicationContext)
 
@@ -20,10 +29,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val score: LiveData<Int> = _score
 
     private val _winningMovie = MutableLiveData<Int>()
-    val winningMovie: LiveData<Int> get() = _winningMovie
 
     private val _selectedMovie = MutableLiveData<Int>()
     val selectedMovie: LiveData<Int> get() = _selectedMovie
+
+    private val _gameOver = MutableLiveData<Boolean>()
+    val gameOver: LiveData<Boolean> get() = _gameOver
+
+    private val _hasNavigatedToGameOver = MutableLiveData<Boolean>()
+    val hasNavigatedToGameOver: LiveData<Boolean> get() = _hasNavigatedToGameOver
 
     init {
         // Fill DB with sample data when the ViewModel is created
@@ -58,12 +72,18 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         return if (movie1.voteAverage > movie2.voteAverage) 1 else 2
     }
 
-    fun setSelectedMovie(index: Int) {
-        _selectedMovie.value = index
+    fun evaluateAnswer() {
+        if (_selectedMovie.value == _winningMovie.value) {
+            addToScore()
+            _answerResult.value = AnswerResult.Correct
+        } else {
+            _gameOver.value = true
+            _answerResult.value = AnswerResult.Incorrect
+        }
     }
 
-    fun setWinningMovie(index: Int) {
-        _winningMovie.value = index
+    fun setSelectedMovie(index: Int) {
+        _selectedMovie.value = index
     }
 
     fun addToScore() {
@@ -72,6 +92,35 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     fun resetScore() {
         _score.value = 0
+    }
+
+    fun resetAnswer() {
+        _answerResult.value = null
+    }
+
+    fun shouldNavigateToGameOver(): Boolean {
+        if (_hasNavigatedToGameOver.value == true) return false
+        _hasNavigatedToGameOver.value = true
+        return true
+    }
+
+    fun triggerGameOver() {
+        _gameOver.value = true
+    }
+
+    fun resetGameOver() {
+        _gameOver.value = false
+    }
+
+    private fun resetGameOverNavigation() {
+        _hasNavigatedToGameOver.value = false
+    }
+
+    fun resetGame() {
+        resetAnswer()
+        resetScore()
+        resetGameOverNavigation()
+        _gameOver.value = false
     }
 
     // Call this after game finishes

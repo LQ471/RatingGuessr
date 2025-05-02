@@ -2,6 +2,7 @@ package com.example.ratingguessr
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,14 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private var timer: CountDownTimer? = null
-private val totalTime = 10000L // 10 seconds
-private val interval = 30L // update every 100ms
-private var remainingTime: Long = totalTime
-private var winningMovie = -1
-private var selectedMovie = -1
-private var hasNavigatedToGameOver = false
-
 /**
  * A simple [Fragment] subclass.
  * Use the [GameFragment.newInstance] factory method to
@@ -34,6 +27,10 @@ private var hasNavigatedToGameOver = false
  */
 class GameFragment : Fragment() {
 
+    private var timer: CountDownTimer? = null
+    private val totalTime = 10000L // 10 seconds
+    private val interval = 30L // update every 100ms
+    private var remainingTime: Long = totalTime
     private lateinit var gameViewModel: GameViewModel
 
     override fun onCreateView(
@@ -83,8 +80,6 @@ class GameFragment : Fragment() {
             movie2TitleTextView.text = movie2.title
             movie2YearTextView.text = movie2.releaseYear
             movie2RatingTextView.text = movie2.voteAverageString
-
-            winningMovie = if (movie1.voteAverage > movie2.voteAverage) 1 else 2
         }
 
         gameViewModel.score.observe(viewLifecycleOwner) {
@@ -94,8 +89,35 @@ class GameFragment : Fragment() {
         // Triggering fetching of the data in the viewModel
         fetchMovies()
 
+        val redBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
         val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
         val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+
+        // Updates UI based on correct/incorrect answer
+        gameViewModel.answerResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is GameViewModel.AnswerResult.Correct -> { enableButton(nextButton) }
+                is GameViewModel.AnswerResult.Incorrect -> {
+                        lifecycleScope.launch {
+                            val redColor =
+                                ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
+                            if (gameViewModel.selectedMovie.value == 1) {
+                                movie1RatingTextView.setTextColor(redColor)
+                                movie1ImageButton.background = redBorder
+                            } else if (gameViewModel.selectedMovie.value == 2) {
+                                movie2RatingTextView.setTextColor(redColor)
+                                movie2ImageButton.background = redBorder
+                            }
+
+                            // Delay set to allow the user to see ratings before the game over pop-up appears
+                            delay(2000L)
+                            showGameOverPopUp()
+                        }
+                        disableButton(nextButton)
+                }
+                null -> {}
+            }
+        }
 
         // Initially, set Answer and Next buttons to be unavailable
         disableButton(answerButton)
@@ -103,7 +125,7 @@ class GameFragment : Fragment() {
 
         // Add border to chosen movie and make "Answer" button clickable
         movie1ImageButton.setOnClickListener {
-            selectedMovie = 1
+            gameViewModel.setSelectedMovie(1)
 
             if (movie1ImageButton.background == yellowBorder) {
                 movie1ImageButton.background = originalBackground
@@ -117,7 +139,7 @@ class GameFragment : Fragment() {
 
         // Add border to chosen movie and make "Answer" button clickable
         movie2ImageButton.setOnClickListener {
-            selectedMovie = 2
+            gameViewModel.setSelectedMovie(2)
 
             if (movie2ImageButton.background == yellowBorder) {
                 movie2ImageButton.background = originalBackground
@@ -144,31 +166,8 @@ class GameFragment : Fragment() {
             val progress = (remainingTime.toFloat() / totalTime)
             timeBar.scaleX = progress // Adjust scale based on the time left
 
-            // Increase score when Answer is pressed
-            if (selectedMovie == winningMovie) {
-                gameViewModel.addToScore()
-                enableButton(nextButton)
-            }
-            else {
-                lifecycleScope.launch {
-                    val redColor =
-                        ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
-                    if (selectedMovie == 1) {
-                        movie1RatingTextView.setTextColor(redColor)
-                        movie1ImageButton.background =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
-                    } else if (selectedMovie == 2) {
-                        movie2RatingTextView.setTextColor(redColor)
-                        movie2ImageButton.background =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
-                    }
-
-                    // Delay set to allow the user to see ratings before the game over pop-up appears
-                    delay(2000L)
-                    showGameOverPopUp()
-                }
-                disableButton(nextButton)
-            }
+            // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
+            gameViewModel.evaluateAnswer()
 
             // Make ratings visible:
             movie1RatingTextView.visibility = View.VISIBLE
@@ -198,24 +197,30 @@ class GameFragment : Fragment() {
 
             // Fetch the next movies to display:
             fetchMovies()
+
+            // Reset answer-value for next movie-pair:
+            gameViewModel.resetAnswer()
         }
     }
 
     // Reset setup if fragment is destroyed
     override fun onDestroyView() {
         super.onDestroyView()
-        gameViewModel.resetScore()
-        hasNavigatedToGameOver = false
+        gameViewModel.resetGame()
+        timer?.cancel()
     }
 
     private fun showGameOverPopUp() {
-        if (hasNavigatedToGameOver) return
-        hasNavigatedToGameOver = true
+        // For safety in case both timer runs out and wrong answer is given, resulting in two calls to showGamePopUp()
+        if (!gameViewModel.shouldNavigateToGameOver()) return
 
         // Preventing the timer from triggering another call to showGameOverPopUp() when it runs out
         timer?.cancel()
 
         findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+
+        // Reset answer-value for next game:
+        gameViewModel.resetAnswer()
     }
 
     private fun startTimer(timeBar: View) {
