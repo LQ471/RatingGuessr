@@ -1,6 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#14234A"
+    tools:context=".GameFragment"
+    android:orientation="horizontal">
 
+    <LinearLayout
+        android:id="@+id/ExitButton"
+        style="@style/ExitButtonContainer"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            style="@style/ExitButtonImage"
+            android:src="@drawable/exit" />
+
+        <TextView
+            style="@style/ExitButtonText"
+            android:text="@string/exit_button" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/InGame_Score"
+        style="@style/ScoreButtonContainer"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ExitButton">
+
+        <TextView
+            style="@style/InGame_ScoreText"
+            android:text="@string/score" />
+
+        <TextView
+            android:id="@+id/SessionScore"
+            style="@style/InGame_ScoreText"
+            android:text="0" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/question"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/right_rounded_background"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/question_text"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ExitButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingMovie1"
+        style="@style/MovieRatingTextView"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonMovie1"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonMovie1"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonMovie1"
+        tools:text="Rating" />
+
+    <ImageButton
+        android:id="@+id/imageButtonMovie1"
+        style="@style/MovieImageButtonSmall"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/movie1_poster_description"
+        app:layout_constraintBottom_toTopOf="@id/titleMovie1"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonMovie2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/question" />
+
+    <TextView
+        android:id="@+id/titleMovie1"
+        style="@style/MovieTitleTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@id/releaseYearMovie1"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonMovie1"
+        tools:text="MovieTitle" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie1"
+        style="@style/MovieYearTextViewSmall"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@id/titleMovie1"
+        tools:text="ReleaseYear" />
+
+    <TextView
+        android:id="@+id/ratingMovie2"
+        style="@style/MovieRatingTextView"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonMovie2"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintStart_toEndOf="@id/imageButtonMovie2"
+        tools:text="Rating" />
+
+    <ImageButton
+        android:id="@+id/imageButtonMovie2"
+        style="@style/MovieImageButtonSmall"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/movie2_poster_description"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/titleMovie2"
+        app:layout_constraintEnd_toStartOf="@+id/AnswerButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@id/question" />
+
+    <TextView
+        android:id="@+id/titleMovie2"
+        style="@style/MovieTitleTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@id/releaseYearMovie2"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonMovie2"
+        tools:text="MovieTitle" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie2"
+        style="@style/MovieYearTextViewSmall"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@id/titleMovie2"
+        tools:text="ReleaseYear" />
+
+    <Button
+        android:id="@+id/AnswerButton"
+        style="@style/MainButton"
+        android:layout_marginEnd="30dp"
+        android:text="@string/answer_button"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+
+    <Button
+        android:id="@+id/NextButton"
+        style="@style/MainButton"
+        android:text="@string/next_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/AnswerButton"
+        app:layout_constraintStart_toStartOf="@+id/AnswerButton"
+        app:layout_constraintTop_toBottomOf="@+id/AnswerButton" />
+
+    <FrameLayout
+        android:id="@+id/timeBarContainer"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:id="@+id/timeBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/RatingGuessr_Yellow" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

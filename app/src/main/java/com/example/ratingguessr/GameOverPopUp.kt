@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 class GameOverPopUp : DialogFragment() {
@@ -33,6 +32,7 @@ class GameOverPopUp : DialogFragment() {
         val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
 
         playAgainButton.setOnClickListener {
+            gameViewModel.resetGame()
             findNavController().navigate(R.id.action_gameOverPopUp_to_gameFragment)
         }
 

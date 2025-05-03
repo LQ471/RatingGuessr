@@ -27,10 +27,6 @@ import kotlinx.coroutines.launch
  */
 class GameFragment : Fragment() {
 
-    private var timer: CountDownTimer? = null
-    private val totalTime = 10000L // 10 seconds
-    private val interval = 30L // update every 100ms
-    private var remainingTime: Long = totalTime
     private lateinit var gameViewModel: GameViewModel
 
     override fun onCreateView(
@@ -53,7 +49,7 @@ class GameFragment : Fragment() {
         val exitButton = view.findViewById<View>(R.id.ExitButton)
 
         exitButton.setOnClickListener {
-            // (activity as? GameActivity)?.navigateToIntroFragment()
+            gameViewModel.resetGame()
             view.findNavController().navigate(R.id.action_gameFragment_to_introFragment)
         }
 
@@ -87,35 +83,52 @@ class GameFragment : Fragment() {
         }
 
         // Triggering fetching of the data in the viewModel
-        fetchMovies()
+        if (gameViewModel.moviePair.value == null) {
+            fetchMovies()
+        }
 
         val redBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
         val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
         val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+        val redColor = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
 
         // Updates UI based on correct/incorrect answer
         gameViewModel.answerResult.observe(viewLifecycleOwner) { result ->
+            val selectedMovie = gameViewModel.selectedMovie.value
+
             when (result) {
-                is GameViewModel.AnswerResult.Correct -> { enableButton(nextButton) }
+                is GameViewModel.AnswerResult.Correct -> {
+                    enableButton(nextButton)
+                    when (selectedMovie) {
+                        1 -> movie2RatingTextView.setTextColor(redColor)
+                        2 -> movie1RatingTextView.setTextColor(redColor)
+                    }
+                }
                 is GameViewModel.AnswerResult.Incorrect -> {
                         lifecycleScope.launch {
-                            val redColor =
-                                ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
-                            if (gameViewModel.selectedMovie.value == 1) {
-                                movie1RatingTextView.setTextColor(redColor)
-                                movie1ImageButton.background = redBorder
-                            } else if (gameViewModel.selectedMovie.value == 2) {
-                                movie2RatingTextView.setTextColor(redColor)
-                                movie2ImageButton.background = redBorder
+                            when (selectedMovie) {
+                                1 -> {
+                                    movie1RatingTextView.setTextColor(redColor)
+                                    movie1ImageButton.background = redBorder
+                                }
+                                2 -> {
+                                    movie2RatingTextView.setTextColor(redColor)
+                                    movie2ImageButton.background = redBorder
+                                }
                             }
-
                             // Delay set to allow the user to see ratings before the game over pop-up appears
                             delay(2000L)
-                            showGameOverPopUp()
+                            gameViewModel.triggerGameOver()
                         }
                         disableButton(nextButton)
                 }
                 null -> {}
+            }
+        }
+
+        gameViewModel.gameOver.observe(viewLifecycleOwner) { gameOver ->
+            if (gameOver == true && gameViewModel.shouldNavigateToGameOver()) {
+                findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
             }
         }
 
@@ -155,16 +168,15 @@ class GameFragment : Fragment() {
             timeBar.pivotX = 0f  // Left edge of the view
             timeBar.pivotY = timeBar.height / 2f  // Center vertically
 
-            startTimer(timeBar)  // start the timer *after* pivot is correctly set
+            gameViewModel.startTimer(timeBar)  // start the timer *after* pivot is correctly set
         }
 
         answerButton.setOnClickListener {
             // Stop the timer when Answer is pressed
-            timer?.cancel() // Cancel the running timer
+            gameViewModel.stopTimer()
 
             // Get the current progress (remaining time) and update the timeBar
-            val progress = (remainingTime.toFloat() / totalTime)
-            timeBar.scaleX = progress // Adjust scale based on the time left
+            gameViewModel.getTimerProgress(timeBar)
 
             // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
             gameViewModel.evaluateAnswer()
@@ -181,15 +193,10 @@ class GameFragment : Fragment() {
 
         nextButton.setOnClickListener {
             // Reset the timer and start again
-            startTimer(timeBar)
+            gameViewModel.startTimer(timeBar)
 
             // Preparing for next movie.
-            movie1RatingTextView.visibility = View.INVISIBLE
-            movie2RatingTextView.visibility = View.INVISIBLE
-            movie1ImageButton.isClickable = true
-            movie2ImageButton.isClickable = true
-            movie1ImageButton.background = originalBackground
-            movie2ImageButton.background = originalBackground
+            resetUI(movie1RatingTextView, movie2RatingTextView, movie1ImageButton, movie2ImageButton)
 
             // Disable buttons
             disableButton(nextButton)
@@ -201,44 +208,6 @@ class GameFragment : Fragment() {
             // Reset answer-value for next movie-pair:
             gameViewModel.resetAnswer()
         }
-    }
-
-    // Reset setup if fragment is destroyed
-    override fun onDestroyView() {
-        super.onDestroyView()
-        gameViewModel.resetGame()
-        timer?.cancel()
-    }
-
-    private fun showGameOverPopUp() {
-        // For safety in case both timer runs out and wrong answer is given, resulting in two calls to showGamePopUp()
-        if (!gameViewModel.shouldNavigateToGameOver()) return
-
-        // Preventing the timer from triggering another call to showGameOverPopUp() when it runs out
-        timer?.cancel()
-
-        findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
-
-        // Reset answer-value for next game:
-        gameViewModel.resetAnswer()
-    }
-
-    private fun startTimer(timeBar: View) {
-        timer?.cancel() // Cancel existing timer if any
-
-        timer = object : CountDownTimer(totalTime, interval) {
-            override fun onTick(millisUntilFinished: Long) {
-                remainingTime = millisUntilFinished // Store the remaining time
-
-                val progress = millisUntilFinished.toFloat() / totalTime
-                timeBar.scaleX = progress // Shrink horizontally
-            }
-
-            override fun onFinish() {
-                timeBar.scaleX = 0f
-                showGameOverPopUp()
-            }
-        }.start()
     }
 
     private fun fetchMovies() {
@@ -255,4 +224,14 @@ class GameFragment : Fragment() {
         button.isClickable = true
     }
 
+    private fun resetUI(movie1Rating:TextView, movie2Rating: TextView, movie1Button: ImageButton, movie2Button: ImageButton) {
+        movie1Rating.visibility = View.INVISIBLE
+        movie2Rating.visibility = View.INVISIBLE
+        movie1Rating.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
+        movie2Rating.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
+        movie1Button.isClickable = true
+        movie2Button.isClickable = true
+        movie1Button.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+        movie2Button.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+    }
 }
