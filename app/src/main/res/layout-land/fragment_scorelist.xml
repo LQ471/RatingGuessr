@@ -1,10 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/highScoreContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="35dp"
+    android:paddingTop="35dp"
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
+    android:elevation="8dp"
+    android:background="@color/RatingGuessr_Blue">
 
+    <TextView
+        android:id="@+id/highScoreTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="High Scores"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
+
+    <ScrollView
+        android:layout_width="500dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/highScoreList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/ScoresToIntroButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/button_highlighter"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:text="Home page"
+            android:textColor="#E5AD14"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/PlayAgainButton"
+            style="@style/MainButton"
+            android:text="Play again"
+            android:layout_marginLeft="16dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

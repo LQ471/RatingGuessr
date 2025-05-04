@@ -1,13 +1,16 @@
 package com.example.ratingguessr
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -35,7 +38,17 @@ class HighScoreListFragment : Fragment() {
         scores.forEachIndexed { index, score ->
             val scoreView = TextView(requireContext()).apply {
                 text = "${index + 1}. ${score.name}: ${score.score}"
-                textSize = 16f
+                textSize = 20f
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
+                gravity = Gravity.CENTER
+                setTypeface(typeface, Typeface.BOLD)
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(0, 0, 0, 16) // left, top, right, bottom
+                layoutParams = params
             }
             scoreListLayout.addView(scoreView)
         }
