@@ -52,6 +52,7 @@ class GameOverPopUp : DialogFragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCanceledOnTouchOutside(false)
         dialog?.setCancelable(false)
     }

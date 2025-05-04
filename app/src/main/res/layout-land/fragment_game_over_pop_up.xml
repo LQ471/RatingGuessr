@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="523dp"
+        android:layout_height="413dp"
         android:background="@drawable/pop_up_rounded_background"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="40dp"
-        android:paddingBottom="50dp"
-        android:topRightRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +30,7 @@
         <LinearLayout
             android:id="@+id/InGame_Score"
             style="@style/ScoreButtonContainer"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="8dp">
 
             <TextView
                 style="@style/InGame_ScoreText"
@@ -48,7 +46,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:orientation="vertical">
 
             <TextView
@@ -60,27 +61,34 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/playerNameInput"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_white_background"
-                android:backgroundTint="@color/white"
-                android:hint="Enter your name"
-                android:inputType="text"
-                android:maxLength="20"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textColorHint="#676767"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp">
 
-            <Button
-                android:id="@+id/submitScoreButton"
-                style="@style/MainButton"
-                android:layout_marginTop="16dp"
-                android:text="Submit" />
+                <EditText
+                    android:id="@+id/playerNameInput"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_white_background"
+                    android:backgroundTint="@color/white"
+                    android:hint="Enter your name"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColorHint="#676767"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/submitScoreButton"
+                    style="@style/MainButton"
+                    android:text="Submit"
+                    android:layout_marginLeft="16dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -93,12 +101,13 @@
             android:paddingBottom="0dp"
             android:text="Home page"
             android:textColor="#E5AD14"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/PlayAgainButton"
             style="@style/MainButton"
-            android:layout_marginTop="16dp"
-            android:text="Play again" />
+            android:text="Play again"
+            android:layout_marginTop="16dp"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

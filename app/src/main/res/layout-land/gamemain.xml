@@ -2,24 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#767272"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/RatingGuessr_Blue"
     android:orientation="horizontal"
     android:paddingLeft="5dp">
 
 
-    <FrameLayout
-        android:id="@+id/container_ui_landscape"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/main_fragment"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
-
-    <FrameLayout
-        android:id="@+id/container_list"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="#6e4d50"
-        android:textSize="15sp"
-        android:layout_weight="0.8"
-        />
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"/>
 </LinearLayout>
