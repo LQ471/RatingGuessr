@@ -218,7 +218,10 @@ class GameFragment : Fragment() {
 
             // Show the DialogFragment
             // gameOverFragment.show(parentFragmentManager, "gameOverPopUp")
-            findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+            //findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+            if (findNavController().currentDestination?.id == R.id.gameFragment) {
+                findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+            }
         }
     }
 
