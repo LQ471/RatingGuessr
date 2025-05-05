@@ -1,14 +1,17 @@
 package com.example.ratingguessr
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.core.content.edit
 
 class GameOverPopUp : DialogFragment() {
 
@@ -30,6 +33,32 @@ class GameOverPopUp : DialogFragment() {
 
         val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
         val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
+        val playerNameInput = view.findViewById<EditText>(R.id.playerNameInput)
+        val submitScoreButton = view.findViewById<Button>(R.id.submitScoreButton)
+        val savedNameText = view.findViewById<TextView>(R.id.savedNameText)
+        val savedNameContainer = view.findViewById<View>(R.id.savedNameContainer)
+        val editNameButton = view.findViewById<Button>(R.id.editNameButton)
+
+        // if a name has been added to sharedPreferences (which will always be most recent), dont prompt for name input
+        val prefs = requireContext().getSharedPreferences("player_prefs", Context.MODE_PRIVATE)
+        val recentName = prefs.getString("last_player_name", null)
+
+        // sets visibility of views depending on if theres is a saved recent name or not:
+        if (!recentName.isNullOrEmpty()) {
+            savedNameContainer.visibility = View.VISIBLE
+            playerNameInput.visibility = View.GONE
+            savedNameText.text = recentName
+        } else {
+            savedNameContainer.visibility = View.GONE
+            playerNameInput.visibility = View.VISIBLE
+        }
+
+        // edit name button functionality:
+        editNameButton.setOnClickListener {
+            savedNameContainer.visibility = View.GONE
+            playerNameInput.visibility = View.VISIBLE
+            playerNameInput.setText(recentName ?: "")
+        }
 
         playAgainButton.setOnClickListener {
             gameViewModel.resetGame()
@@ -38,6 +67,27 @@ class GameOverPopUp : DialogFragment() {
 
         frontPageButton.setOnClickListener {
             findNavController().navigate(R.id.action_gameOverPopUp_to_introFragment)
+        }
+
+        // Submits score and prompts for name if none exists in shared preferences
+        submitScoreButton.setOnClickListener {
+            val enteredName = playerNameInput.text.toString().trim()
+            val savedName = prefs.getString("last_player_name", "")?.trim()
+            val playerName = if (enteredName.isNotEmpty()) enteredName else savedName ?: ""
+            val score = gameViewModel.score.value ?: 0
+
+            if (playerName.isNotEmpty()) {
+                prefs.edit {
+                    putString("last_player_name", playerName)
+                }
+
+                val dbHelper = SimpleSQL(requireContext())
+
+                dbHelper.insertScore(playerName, score)
+                findNavController().navigate(R.id.action_gameOverPopUp_to_highScoreListFragment)
+                } else {
+                    playerNameInput.error = "Please enter your name"
+                }
         }
     }
 

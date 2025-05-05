@@ -56,8 +56,10 @@ class HighScoreListFragment : Fragment() {
         val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
         val homepageButton = view.findViewById<Button>(R.id.ScoresToIntroButton)
 
+
         playAgainButton.setOnClickListener {
             //(activity as? GameActivity)?.navigateToGameFragment()
+            viewModel.resetGame()
             view.findNavController().navigate(R.id.action_highScoreListFragment_to_gameFragment)
         }
 

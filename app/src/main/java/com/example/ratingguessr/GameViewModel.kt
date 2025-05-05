@@ -153,14 +153,4 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val progress = (remainingTime.toFloat() / totalTime)
         timeBar.scaleX = progress
     }
-    // Call this after game finishes
-    // We might need a new fragment for the addScore popup?
-    fun addScore(name: String, score: Int) {
-        dbHelper.insertScore(name, score)
-    }
-
-    // Helper function to return topScores
-    fun getTopScores(): List<HighScore> {
-        return dbHelper.getTopScores()
-    }
 }

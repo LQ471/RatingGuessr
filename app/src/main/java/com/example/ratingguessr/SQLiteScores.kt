@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 
-// A simple data class to hold high score records in memory
 data class HighScore(val name: String, val score: Int)
 
 // SQLiteOpenHelper implementation for storing and retrieving high scores

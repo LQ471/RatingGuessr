@@ -21,6 +21,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:id="@+id/savedNameContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/savedNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PlayerName"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/editNameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🖉"
+                android:textSize="16sp"
+                android:background="@android:color/transparent"
+                android:textColor="@color/RatingGuessr_ButtonYellow"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="0dp" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
@@ -55,8 +88,9 @@
 
             <TextView
                 android:id="@+id/registerQuestion"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Want to register your score?"
                 android:textColor="@color/white"
                 android:textSize="18dp"
@@ -81,6 +115,9 @@
             <Button
                 android:id="@+id/submitScoreButton"
                 style="@style/MainButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:text="Submit" />
 
