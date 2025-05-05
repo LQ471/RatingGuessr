@@ -74,7 +74,7 @@ class GameOverPopUp : DialogFragment() {
             val enteredName = playerNameInput.text.toString().trim()
             val savedName = prefs.getString("last_player_name", "")?.trim()
             val playerName = if (enteredName.isNotEmpty()) enteredName else savedName ?: ""
-            val score = gameViewModel.score.value ?: 0
+            val score = gameViewModel.score.value ?: 0f
 
             if (playerName.isNotEmpty()) {
                 prefs.edit {

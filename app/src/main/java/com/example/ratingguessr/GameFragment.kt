@@ -81,10 +81,6 @@ class GameFragment : Fragment() {
         }
 
         gameViewModel.score.observe(viewLifecycleOwner) {
-            scoreTextView.text = it.toString()
-        } */
-
-        gameViewModel.score.observe(viewLifecycleOwner) {
             // scoreTextView.text = String.format("%.2f", it)
             scoreTextView.text = gameViewModel.getFormattedScore()
         }
@@ -107,7 +103,6 @@ class GameFragment : Fragment() {
             movie1ImageButton.isClickable = false
             movie2ImageButton.isClickable = false
             gameViewModel.stopTimer()
-            gameViewModel.getTimerProgress(timeBar)
             gameViewModel.evaluateAnswer()
 
             movie1RatingTextView.visibility = View.VISIBLE

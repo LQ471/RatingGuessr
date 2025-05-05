@@ -45,11 +45,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _hasNavigatedToGameOver = MutableLiveData<Boolean>()
 
-    init {
-        // Fill DB with sample data when the ViewModel is created
-        dbHelper.fillDB()
-    }
-
     fun loadTwoDistinctMovies(retryCount: Int = 0) {
         val maxRetries = 5
         if (retryCount == maxRetries) return

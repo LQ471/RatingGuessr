@@ -23,7 +23,7 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
     // Inserts a new name + score into the high score table
     // Here we could use execSQL and insert the params directly instead (see sqlite example file)
-    fun insertScore(name: String, score: Int) {
+    fun insertScore(name: String, score: Float) {
         val db = writableDatabase
         val values = ContentValues().apply {
             put(COLUMN_NAME, name)
@@ -57,14 +57,6 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         cursor.close()
         db.close()
         return scores
-    }
-
-    fun fillDB() {
-        insertScore("Jack", 1)
-        insertScore("Jake", 2)
-        insertScore("Jackie", 3)
-        insertScore("Jacob", 4)
-        insertScore("James", 5)
     }
 
     companion object {
