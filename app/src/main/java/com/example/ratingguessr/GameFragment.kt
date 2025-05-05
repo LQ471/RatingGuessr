@@ -36,6 +36,7 @@ private var selectedMovie = -1
 class GameFragment : Fragment() {
 
     private lateinit var gameViewModel: GameViewModel
+    private var isGameOver = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +50,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
+        isGameOver = false
 
         val answerButton = view.findViewById<Button>(R.id.AnswerButton)
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
@@ -96,10 +98,6 @@ class GameFragment : Fragment() {
         val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
         val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
 
-        // Initially, set Answer button to be unavailable
-        answerButton.alpha = 0.5f // 50% transparency
-        answerButton.isClickable = false // Make it unclickable
-
         movie1ImageButton.setOnClickListener {
             selectedMovie = 1
 
@@ -129,10 +127,6 @@ class GameFragment : Fragment() {
             answerButton.alpha = 1f // 50% transparency
             answerButton.isClickable = true // Make it unclickable
         }
-
-        // Initially, set Next button to be unavailable
-        nextButton.alpha = 0.5f // 50% transparency
-        nextButton.isClickable = false // Make it unclickable
 
         timeBar.post {
             timeBar.pivotX = 0f  // Left edge of the view
@@ -200,6 +194,15 @@ class GameFragment : Fragment() {
             // Fetch the next movies to display:
             fetchMovies()
         }
+
+        // Initially, set Answer button to be unavailable
+        answerButton.alpha = 0.5f // 50% transparency
+        answerButton.isClickable = false // Make it unclickable
+
+        // Initially, set Next button to be unavailable
+        nextButton.alpha = 0.5f // 50% transparency
+        nextButton.isClickable = false // Make it unclickable
+
     }
 
     // Reset score if fragment is left
