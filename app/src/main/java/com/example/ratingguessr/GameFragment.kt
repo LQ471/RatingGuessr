@@ -100,10 +100,20 @@ class GameFragment : Fragment() {
         fun onMovieSelected(selectedMovie: Int) {
             gameViewModel.setSelectedMovie(selectedMovie)
 
+
+
             movie1ImageButton.isClickable = false
             movie2ImageButton.isClickable = false
             gameViewModel.stopTimer()
-            gameViewModel.evaluateAnswer()
+
+            // Get the current progress (remaining time) and update the timeBar
+            //gameViewModel.getTimerProgress(timeBar)
+            val timeBonus = gameViewModel.getTimerFraction()
+
+
+            // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
+            // gameViewModel.evaluateAnswer()
+            gameViewModel.evaluateAnswer(timeBonus)
 
             movie1RatingTextView.visibility = View.VISIBLE
             movie2RatingTextView.visibility = View.VISIBLE
@@ -144,6 +154,7 @@ class GameFragment : Fragment() {
                         delay(2000L)
                         gameViewModel.triggerGameOver()
                     }
+
                 }
                 null -> return
             }
