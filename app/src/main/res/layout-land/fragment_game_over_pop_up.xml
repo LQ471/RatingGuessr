@@ -1,36 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameOverRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000">
 
-    <LinearLayout
-        android:layout_width="523dp"
-        android:layout_height="413dp"
+    <!-- Background container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/popupContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/pop_up_rounded_background"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:paddingTop="40dp"
+        android:paddingBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.444">
 
+        <!-- Saved name container -->
+        <LinearLayout
+            android:id="@+id/savedNameContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/savedNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="PlayerName"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/editNameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:text="🖉"
+                android:textColor="@color/RatingGuessr_ButtonYellow"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Game Over Text -->
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginTop="16dp"
             android:text="Game over"
             android:textColor="@color/white"
             android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/savedNameContainer" />
 
+        <!-- Score container -->
         <LinearLayout
             android:id="@+id/InGame_Score"
             style="@style/ScoreButtonContainer"
-            android:layout_marginTop="8dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView4">
 
             <TextView
                 style="@style/InGame_ScoreText"
@@ -40,74 +92,91 @@
                 android:id="@+id/SessionScore"
                 style="@style/InGame_ScoreText"
                 android:text="5" />
-
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/registerQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Want to register your score?"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp">
-
-                <EditText
-                    android:id="@+id/playerNameInput"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_white_background"
-                    android:backgroundTint="@color/white"
-                    android:hint="Enter your name"
-                    android:inputType="text"
-                    android:maxLength="20"
-                    android:padding="8dp"
-                    android:singleLine="true"
-                    android:textColorHint="#676767"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/submitScoreButton"
-                    style="@style/MainButton"
-                    android:text="Submit"
-                    android:layout_marginLeft="16dp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/FrontPageButton"
+        <!-- Register question -->
+        <TextView
+            android:id="@+id/registerQuestion"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/button_highlighter"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            android:text="Home page"
-            android:textColor="#E5AD14"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Want to register your score?"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/InGame_Score" />
 
-        <Button
-            android:id="@+id/PlayAgainButton"
-            style="@style/MainButton"
-            android:text="Play again"
-            android:layout_marginTop="16dp"/>
+        <!-- Name input -->
+        <EditText
+            android:id="@+id/playerNameInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/rounded_white_background"
+            android:backgroundTint="@color/white"
+            android:hint="Enter your name"
+            android:inputType="text"
+            android:maxLength="20"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textColorHint="#676767"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerQuestion" />
 
-    </LinearLayout>
+        <!-- Buttons row: Home, Submit, Play Again -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playerNameInput">
+
+            <Button
+                android:id="@+id/FrontPageButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/button_highlighter"
+                android:text="Home page"
+                android:textColor="#E5AD14"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/submitScoreButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/submitScoreButton"
+                style="@style/MainButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Submit"
+                app:layout_constraintEnd_toStartOf="@id/PlayAgainButton"
+                app:layout_constraintStart_toEndOf="@id/FrontPageButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/PlayAgainButton"
+                style="@style/MainButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Play again"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/submitScoreButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

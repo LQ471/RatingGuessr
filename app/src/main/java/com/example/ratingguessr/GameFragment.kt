@@ -122,6 +122,7 @@ class GameFragment : Fragment() {
 
             when (val result = gameViewModel.answerResult.value) {
                 is GameViewModel.AnswerResult.Correct -> {
+                    enableButton(nextButton)
                     // Mark the incorrect one in red
                     if (selectedMovie == 1) {
                         movie2RatingTextView.setTextColor(redColor)
@@ -130,6 +131,7 @@ class GameFragment : Fragment() {
                     }
                 }
                 is GameViewModel.AnswerResult.Incorrect -> {
+                    disableButton(nextButton)
                     if (selectedMovie == 1) {
                         movie1RatingTextView.setTextColor(redColor)
                         movie1ImageButton.background = redBorder
@@ -145,8 +147,6 @@ class GameFragment : Fragment() {
                 }
                 null -> return
             }
-
-            enableButton(nextButton)
         }
 
         movie1ImageButton.setOnClickListener {

@@ -34,7 +34,7 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     }
 
 
-    fun getTopScores(limit: Int = 5): List<HighScore> {
+    fun getTopScores(limit: Int = 15): List<HighScore> {
         val db = readableDatabase
 
         val cursor = db.query(
