@@ -7,19 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 class GameOverPopUp : DialogFragment() {
 
-    private var score: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            score = it.getString("score")
-        }
-    }
+    private lateinit var gameViewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,13 +24,15 @@ class GameOverPopUp : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
-        scoreTextView.text = score
+        scoreTextView.text = gameViewModel.score.value.toString()
 
         val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
         val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
 
         playAgainButton.setOnClickListener {
+            gameViewModel.resetGame()
             findNavController().navigate(R.id.action_gameOverPopUp_to_gameFragment)
         }
 

@@ -23,7 +23,7 @@
 
         <TextView
             style="@style/ExitButtonText"
-            android:text="Exit" />
+            android:text="@string/exit_button" />
 
     </LinearLayout>
 
@@ -37,7 +37,7 @@
 
         <TextView
             style="@style/InGame_ScoreText"
-            android:text="Score" />
+            android:text="@string/score" />
 
         <TextView
             android:id="@+id/SessionScore"
@@ -60,7 +60,7 @@
         android:background="@drawable/right_rounded_background"
         android:gravity="center"
         android:padding="15dp"
-        android:text="Which movie has the highest rating?"
+        android:text="@string/question_text"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
     <ImageButton
         android:id="@+id/imageButtonMovie1"
         style="@style/MovieImageButton"
-        android:contentDescription="Movie poster 1"
+        android:contentDescription="@string/movie1_poster_description"
         app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonMovie2"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +101,7 @@
     <ImageButton
         android:id="@+id/imageButtonMovie2"
         style="@style/MovieImageButton"
-        android:contentDescription="Movie poster 2"
+        android:contentDescription="@string/movie2_poster_description"
         app:layout_constraintBottom_toTopOf="@+id/AnswerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageButtonMovie1"
@@ -133,7 +133,7 @@
         android:id="@+id/AnswerButton"
         style="@style/MainButton"
         android:layout_marginBottom="16dp"
-        android:text="Answer"
+        android:text="@string/answer_button"
         app:layout_constraintBottom_toTopOf="@id/NextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -142,7 +142,7 @@
         android:id="@+id/NextButton"
         style="@style/MainButton"
         android:layout_marginBottom="50dp"
-        android:text="Next"
+        android:text="@string/next_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
