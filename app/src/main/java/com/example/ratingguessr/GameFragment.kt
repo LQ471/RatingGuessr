@@ -80,8 +80,13 @@ class GameFragment : Fragment() {
             }
         }
 
-        gameViewModel.score.observe(viewLifecycleOwner) {
+        /* gameViewModel.score.observe(viewLifecycleOwner) {
             scoreTextView.text = it.toString()
+        } */
+
+        gameViewModel.score.observe(viewLifecycleOwner) {
+            // scoreTextView.text = String.format("%.2f", it)
+            scoreTextView.text = gameViewModel.getFormattedScore()
         }
 
         // Triggering fetching of the data in the viewModel
@@ -174,10 +179,13 @@ class GameFragment : Fragment() {
             gameViewModel.stopTimer()
 
             // Get the current progress (remaining time) and update the timeBar
-            gameViewModel.getTimerProgress(timeBar)
+            //gameViewModel.getTimerProgress(timeBar)
+            val timeBonus = gameViewModel.getTimerFraction()
+
 
             // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
-            gameViewModel.evaluateAnswer()
+            // gameViewModel.evaluateAnswer()
+            gameViewModel.evaluateAnswer(timeBonus)
 
             // Make ratings visible:
             movie1RatingTextView.visibility = View.VISIBLE

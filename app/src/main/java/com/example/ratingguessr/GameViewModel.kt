@@ -32,9 +32,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var _moviePair = MutableLiveData<Pair<Movie, Movie>?>()
     val moviePair: LiveData<Pair<Movie, Movie>?> = _moviePair
 
-    /** private val _score = MutableLiveData(0)
-    val score: LiveData<Int> = _score **/
-
     private val _score = MutableLiveData<Float>(0f)
     val score: LiveData<Float> = _score
 
@@ -81,15 +78,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         return if (movie1.voteAverage > movie2.voteAverage) 1 else 2
     }
 
-    /** fun evaluateAnswer() {
-        if (_selectedMovie.value == _winningMovie.value) {
-            addToScore()
-            _answerResult.value = AnswerResult.Correct
-        } else {
-            _answerResult.value = AnswerResult.Incorrect
-        }
-    } **/
-
     fun evaluateAnswer(timeBonus: Float = 0f) {
         if (_selectedMovie.value == _winningMovie.value) {
             addToScore(1f + timeBonus)
@@ -102,10 +90,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun setSelectedMovie(index: Int) {
         _selectedMovie.value = index
     }
-
-    /** fun addToScore() {
-        _score.value = (_score.value ?: 0) + 1
-    } **/
 
     fun addToScore(base: Float = 1f) {
         _score.value = (_score.value ?: 0f) + base
@@ -165,10 +149,14 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         timer?.cancel()
     }
 
-    fun getTimerProgress(timeBar: View) {
-        val progress = (remainingTime.toFloat() / totalTime)
-        timeBar.scaleX = progress
+    fun getTimerFraction(): Float {
+        return (remainingTime.toFloat() / totalTime).coerceIn(0f, 1f)
     }
+
+    fun getFormattedScore(): String {
+        return String.format("%.2f", _score.value ?: 0f)
+    }
+
     // Call this after game finishes
     // We might need a new fragment for the addScore popup?
     fun addScore(name: String, score: Int) {
