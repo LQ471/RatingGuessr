@@ -82,6 +82,11 @@ class GameFragment : Fragment() {
 
         gameViewModel.score.observe(viewLifecycleOwner) {
             scoreTextView.text = it.toString()
+        } */
+
+        gameViewModel.score.observe(viewLifecycleOwner) {
+            // scoreTextView.text = String.format("%.2f", it)
+            scoreTextView.text = gameViewModel.getFormattedScore()
         }
 
         // Triggering fetching of the data in the viewModel

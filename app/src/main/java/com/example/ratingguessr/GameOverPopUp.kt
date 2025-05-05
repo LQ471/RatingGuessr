@@ -29,7 +29,7 @@ class GameOverPopUp : DialogFragment() {
 
         gameViewModel = ViewModelProvider(requireActivity())[GameViewModel::class.java]
         val scoreTextView = view.findViewById<TextView>(R.id.SessionScore)
-        scoreTextView.text = gameViewModel.score.value.toString()
+        scoreTextView.text = gameViewModel.getFormattedScore()
 
         val playAgainButton = view.findViewById<Button>(R.id.PlayAgainButton)
         val frontPageButton = view.findViewById<Button>(R.id.FrontPageButton)
