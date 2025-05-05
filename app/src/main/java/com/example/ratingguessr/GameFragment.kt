@@ -132,10 +132,6 @@ class GameFragment : Fragment() {
             }
         }
 
-        // Initially, set Answer and Next buttons to be unavailable
-        disableButton(answerButton)
-        disableButton(nextButton)
-
         // Add border to chosen movie and make "Answer" button clickable
         movie1ImageButton.setOnClickListener {
             gameViewModel.setSelectedMovie(1)
@@ -208,6 +204,10 @@ class GameFragment : Fragment() {
             // Reset answer-value for next movie-pair:
             gameViewModel.resetAnswer()
         }
+
+        // Initially, set Answer and Next buttons to be unavailable
+        disableButton(answerButton)
+        disableButton(nextButton)
     }
 
     private fun fetchMovies() {
