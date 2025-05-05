@@ -29,8 +29,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val movieRepository = MovieRepository()
     private val dbHelper = SimpleSQL(application.applicationContext)
 
-    private var _moviePair = MutableLiveData<Pair<Movie, Movie>>()
-    val moviePair: LiveData<Pair<Movie, Movie>> = _moviePair
+    private var _moviePair = MutableLiveData<Pair<Movie, Movie>?>()
+    val moviePair: LiveData<Pair<Movie, Movie>?> = _moviePair
 
     private val _score = MutableLiveData(0)
     val score: LiveData<Int> = _score
@@ -124,6 +124,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _gameOver.value = false
         _selectedMovie.value = null
         timer?.cancel()
+        _moviePair.value = null
     }
 
     fun startTimer(timeBar: View) {

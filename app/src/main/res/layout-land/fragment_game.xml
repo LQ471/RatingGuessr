@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/RatingGuessr_Blue">
+    android:background="#14234A"
+    android:orientation="horizontal"
+    tools:context=".GameFragment">
 
     <LinearLayout
         android:id="@+id/ExitButton"
         style="@style/ExitButtonContainer"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
-        android:clipToOutline="true"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             style="@style/ExitButtonImage"
-            android:clipToOutline="true"
             android:src="@drawable/exit" />
 
         <TextView
             style="@style/ExitButtonText"
-            android:text="Exit" />
+            android:text="@string/exit_button" />
 
     </LinearLayout>
 
@@ -30,13 +30,12 @@
         android:id="@+id/InGame_Score"
         style="@style/ScoreButtonContainer"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ExitButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ExitButton">
 
         <TextView
             style="@style/InGame_ScoreText"
-            android:text="Score" />
+            android:text="@string/score" />
 
         <TextView
             android:id="@+id/SessionScore"
@@ -47,128 +46,137 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/question"
-        android:layout_width="422dp"
-        android:layout_height="60dp"
-        android:autoSizeMaxTextSize="20sp"
-        android:autoSizeMinTextSize="18sp"
-        android:autoSizeStepGranularity="1sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
         android:autoSizeTextType="uniform"
-        android:background="@drawable/black_rounded_background"
+        android:background="@drawable/right_rounded_background"
         android:gravity="center"
-        android:padding="15dp"
-        android:text="Which movie has the highest rating?"
+        android:padding="8dp"
+        android:text="@string/question_text"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/ExitButton"
-        app:layout_constraintEnd_toStartOf="@+id/InGame_Score"
-        app:layout_constraintStart_toEndOf="@+id/ExitButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ExitButton" />
+
+    <TextView
+        android:id="@+id/ratingMovie1"
+        style="@style/MovieRatingTextView"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonMovie1"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonMovie1"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonMovie1"
+        tools:text="Rating" />
+
+    <ImageButton
+        android:id="@+id/imageButtonMovie1"
+        style="@style/MovieImageButtonSmall"
+        android:layout_marginEnd="40dp"
+        android:contentDescription="@string/movie1_poster_description"
+        app:layout_constraintBottom_toTopOf="@+id/titleMovie1"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonMovie2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/titleMovie1"
+        style="@style/MovieTitleTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@id/releaseYearMovie1"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonMovie1"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="MovieTitle" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie1"
+        style="@style/MovieYearTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@+id/timeBarContainer"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@id/titleMovie1"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="ReleaseYear" />
+
+    <TextView
+        android:id="@+id/ratingMovie2"
+        style="@style/MovieRatingTextView"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonMovie2"
+        app:layout_constraintStart_toEndOf="@id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonMovie2"
+        tools:text="Rating" />
+
+    <ImageButton
+        android:id="@+id/imageButtonMovie2"
+        style="@style/MovieImageButtonSmall"
+        android:contentDescription="@string/movie2_poster_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/imageButtonMovie1"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/titleMovie2"
+        app:layout_constraintVertical_bias="0.5"/>
+
+    <TextView
+        android:id="@+id/titleMovie2"
+        style="@style/MovieTitleTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@id/releaseYearMovie2"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonMovie2"
+        tools:text="MovieTitle" />
+
+    <TextView
+        android:id="@+id/releaseYearMovie2"
+        style="@style/MovieYearTextViewSmall"
+        app:layout_constraintBottom_toTopOf="@+id/timeBarContainer"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
+        app:layout_constraintTop_toBottomOf="@id/titleMovie2"
+        tools:text="ReleaseYear" />
+
+    <Button
+        android:id="@+id/AnswerButton"
+        style="@style/MainButton"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/answer_button"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <Button
+        android:id="@+id/NextButton"
+        style="@style/MainButton"
+        android:text="@string/next_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/AnswerButton"
+        app:layout_constraintStart_toStartOf="@+id/AnswerButton"
+        app:layout_constraintTop_toBottomOf="@+id/AnswerButton" />
 
     <FrameLayout
         android:id="@+id/timeBarContainer"
         android:layout_width="0dp"
-        android:layout_height="3dp"
+        android:layout_height="8dp"
         android:background="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/question"
-        app:layout_constraintStart_toStartOf="@+id/question">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <View
             android:id="@+id/timeBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/RatingGuessr_Yellow" /> <!-- this is the shrinking bar -->
-
+            android:background="@color/RatingGuessr_Yellow" />
     </FrameLayout>
-
-    <ImageButton
-        android:id="@+id/imageButtonMovie1"
-        style="@style/MovieImageButton"
-        android:layout_marginTop="8dp"
-        android:contentDescription="Movie poster 1"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonMovie2"
-        app:layout_constraintHorizontal_bias="0.543"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingMovie1" />
-
-    <TextView
-        android:id="@+id/titleMovie1"
-        style="@style/MovieTitleTextView"
-        android:layout_width="250dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonMovie1" />
-
-    <TextView
-        android:id="@+id/releaseYearMovie1"
-        style="@style/MovieYearTextView"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
-        app:layout_constraintTop_toBottomOf="@+id/titleMovie1" />
-
-    <TextView
-        android:id="@+id/ratingMovie1"
-        style="@style/MovieRatingTextView"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie1"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie1"
-        app:layout_constraintTop_toBottomOf="@+id/question" />
-
-    <ImageButton
-        android:id="@+id/imageButtonMovie2"
-        style="@style/MovieImageButton"
-        android:layout_marginEnd="212dp"
-        android:contentDescription="Movie poster 2"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButtonMovie1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonMovie1"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/titleMovie2"
-        style="@style/MovieTitleTextView"
-        android:layout_width="250dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonMovie2" />
-
-    <TextView
-        android:id="@+id/releaseYearMovie2"
-        style="@style/MovieYearTextView"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
-        app:layout_constraintTop_toBottomOf="@+id/titleMovie2" />
-
-    <TextView
-        android:id="@+id/ratingMovie2"
-        style="@style/MovieRatingTextView"
-        app:layout_constraintBottom_toBottomOf="@+id/ratingMovie1"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2"
-        app:layout_constraintTop_toTopOf="@+id/ratingMovie1" />
-
-    <Button
-        android:id="@+id/AnswerButton"
-        style="@style/MainButton"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="16dp"
-        android:text="Answer"
-        app:layout_constraintBottom_toTopOf="@+id/NextButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/titleMovie2"
-        app:layout_constraintTop_toBottomOf="@+id/InGame_Score" />
-
-    <Button
-        android:id="@+id/NextButton"
-        style="@style/MainButton"
-        android:layout_marginBottom="128dp"
-        android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/AnswerButton"
-        app:layout_constraintHorizontal_bias="0.542"
-        app:layout_constraintStart_toStartOf="@+id/AnswerButton" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

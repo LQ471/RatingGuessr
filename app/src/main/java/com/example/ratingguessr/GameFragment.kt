@@ -66,16 +66,18 @@ class GameFragment : Fragment() {
         val movie2RatingTextView = view.findViewById<TextView>(R.id.ratingMovie2)
 
         // Setting the layout through API calls in the ViewModel
-        gameViewModel.moviePair.observe(viewLifecycleOwner) { (movie1, movie2) ->
-            movie1ImageButton.load(movie1.fullPosterUrl)
-            movie1TitleTextView.text = movie1.title
-            movie1YearTextView.text = movie1.releaseYear
-            movie1RatingTextView.text = movie1.voteAverageString
+        gameViewModel.moviePair.observe(viewLifecycleOwner) { pair ->
+            pair?.let { (movie1, movie2) ->
+                movie1ImageButton.load(movie1.fullPosterUrl)
+                movie1TitleTextView.text = movie1.title
+                movie1YearTextView.text = movie1.releaseYear
+                movie1RatingTextView.text = movie1.voteAverageString
 
-            movie2ImageButton.load(movie2.fullPosterUrl)
-            movie2TitleTextView.text = movie2.title
-            movie2YearTextView.text = movie2.releaseYear
-            movie2RatingTextView.text = movie2.voteAverageString
+                movie2ImageButton.load(movie2.fullPosterUrl)
+                movie2TitleTextView.text = movie2.title
+                movie2YearTextView.text = movie2.releaseYear
+                movie2RatingTextView.text = movie2.voteAverageString
+            }
         }
 
         gameViewModel.score.observe(viewLifecycleOwner) {
