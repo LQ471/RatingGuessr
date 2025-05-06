@@ -97,10 +97,34 @@ class GameFragment : Fragment() {
             }
         }
 
+        gameViewModel.timeBarRemainingTimeLiveData.observe(viewLifecycleOwner) { millisRemaining ->
+            val progress = millisRemaining.toFloat() / 10000L
+            timeBar.scaleX = progress
+        }
+
+        val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
+        val redBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
+        val redColor = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
+        val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
+
+        gameViewModel.selectedMovie.observe(viewLifecycleOwner) { selectedMovie ->
+            when (selectedMovie) {
+                1 -> {
+                    movie1ImageButton.background = yellowBorder
+                    movie2ImageButton.background = originalBackground
+                }
+                2 -> {
+                    movie2ImageButton.background = yellowBorder
+                    movie1ImageButton.background = originalBackground
+                } else -> {
+                    movie1ImageButton.background = originalBackground
+                    movie2ImageButton.background = originalBackground
+                }
+            }
+        }
+
         fun onMovieSelected(selectedMovie: Int) {
             gameViewModel.setSelectedMovie(selectedMovie)
-
-
 
             movie1ImageButton.isClickable = false
             movie2ImageButton.isClickable = false
@@ -110,25 +134,12 @@ class GameFragment : Fragment() {
             //gameViewModel.getTimerProgress(timeBar)
             val timeBonus = gameViewModel.getTimerFraction()
 
-
             // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
             // gameViewModel.evaluateAnswer()
             gameViewModel.evaluateAnswer(timeBonus)
 
             movie1RatingTextView.visibility = View.VISIBLE
             movie2RatingTextView.visibility = View.VISIBLE
-
-            val yellowBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_yellow)
-            val redBorder = ContextCompat.getDrawable(requireContext(), R.drawable.border_red)
-            val redColor = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Red)
-
-            if (selectedMovie == 1) {
-                movie1ImageButton.background = yellowBorder
-                movie2ImageButton.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
-            } else {
-                movie2ImageButton.background = yellowBorder
-                movie1ImageButton.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
-            }
 
             when (val result = gameViewModel.answerResult.value) {
                 is GameViewModel.AnswerResult.Correct -> {
@@ -168,23 +179,20 @@ class GameFragment : Fragment() {
             onMovieSelected(2)
         }
 
-
         timeBar.post {
             timeBar.pivotX = 0f  // Left edge of the view
             timeBar.pivotY = timeBar.height / 2f  // Center vertically
 
-            gameViewModel.startTimer(timeBar)  // start the timer *after* pivot is correctly set
+            gameViewModel.startTimer()  // start the timer *after* pivot is correctly set
         }
 
         nextButton.setOnClickListener {
             disableButton(nextButton)
             gameViewModel.resetAnswer()
-            gameViewModel.startTimer(timeBar)
+            gameViewModel.startTimer()
             resetUI(movie1RatingTextView, movie2RatingTextView, movie1ImageButton, movie2ImageButton, nextButton)
             fetchMovies()
         }
-
-
 
         // Initially, set Next button to be unavailable
         disableButton(nextButton)

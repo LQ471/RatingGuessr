@@ -16,6 +16,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val totalTime = 10000L // 10 seconds
     private val interval = 30L // update every 100ms
     private var remainingTime: Long = totalTime
+    private var isTimerRunning: Boolean = false
 
     // Class to handle evaluation
     sealed class AnswerResult {
@@ -44,6 +45,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val gameOver: LiveData<Boolean> get() = _gameOver
 
     private val _hasNavigatedToGameOver = MutableLiveData<Boolean>()
+
+    private val _timeBarRemainingTimeLiveData = MutableLiveData<Long>()
+    val timeBarRemainingTimeLiveData: LiveData<Long> get() = _timeBarRemainingTimeLiveData
+
 
     fun loadTwoDistinctMovies(retryCount: Int = 0) {
         val maxRetries = 5
@@ -118,23 +123,22 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         resetGameOverNavigation()
         _gameOver.value = false
         _selectedMovie.value = null
-        timer?.cancel()
+        stopTimer()
         _moviePair.value = null
     }
 
-    fun startTimer(timeBar: View) {
-        timer?.cancel() // Cancel existing timer if any
+    fun startTimer() {
+        if (isTimerRunning) return
+        isTimerRunning = true
 
         timer = object : CountDownTimer(totalTime, interval) {
             override fun onTick(millisUntilFinished: Long) {
                 remainingTime = millisUntilFinished // Store the remaining time
-
-                val progress = millisUntilFinished.toFloat() / totalTime
-                timeBar.scaleX = progress // Shrink horizontally
+                _timeBarRemainingTimeLiveData.postValue(millisUntilFinished)
             }
 
             override fun onFinish() {
-                timeBar.scaleX = 0f
+                _timeBarRemainingTimeLiveData.postValue(0L)
                 triggerGameOver()
             }
         }.start()
@@ -142,6 +146,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stopTimer() {
         timer?.cancel()
+        isTimerRunning = false
     }
 
     fun getTimerFraction(): Float {
