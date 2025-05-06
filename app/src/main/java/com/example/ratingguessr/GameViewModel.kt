@@ -15,7 +15,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val totalTime = 10000L // 10 seconds
     private val interval = 30L // update every 100ms
     private var remainingTime: Long = totalTime
-     var isTimerRunning: Boolean = false
+    private var isTimerRunning: Boolean = false
 
     // Class to handle evaluation of answer
     sealed class AnswerResult {
@@ -84,7 +84,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             _answerResult.value = AnswerResult.Incorrect
         }
-
     }
 
     fun setSelectedMovie(index: Int) {

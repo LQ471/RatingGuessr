@@ -161,7 +161,6 @@ class GameFragment : Fragment() {
                             movie2ImageButton.background = redBorder
                         }
                     }
-
                 }
                 null -> {}
             }
@@ -171,7 +170,6 @@ class GameFragment : Fragment() {
             timeBar.pivotX = 0f  // Left edge of the view
             timeBar.pivotY = timeBar.height / 2f  // Center vertically
 
-            // Only start the timer if there is not a current game ongoing (i.e. a movie has been selected)
             gameViewModel.startTimer()  // start the timer *after* pivot is correctly set
         }
 
