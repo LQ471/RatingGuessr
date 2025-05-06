@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 
-data class HighScore(val name: String, val score: Int)
+data class HighScore(val name: String, val score: Float)
 
 // SQLiteOpenHelper implementation for storing and retrieving high scores
 class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, VERSION) {
@@ -14,7 +14,7 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         db.execSQL(
             "CREATE TABLE $TABLE_NAME (" +
                     "$COLUMN_NAME TEXT," +
-                    "$COLUMN_SCORE INTEGER" +
+                    "$COLUMN_SCORE REAL" +
                     ");"
         )
     }
@@ -34,7 +34,7 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     }
 
 
-    fun getTopScores(limit: Int = 15): List<HighScore> {
+    fun getTopScores(limit: Int = 100): List<HighScore> {
         val db = readableDatabase
 
         val cursor = db.query(
@@ -50,7 +50,7 @@ class SimpleSQL(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         val scores = mutableListOf<HighScore>()
         while (cursor.moveToNext()) {
             val name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME))
-            val score = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SCORE))
+            val score = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SCORE))
             scores.add(HighScore(name, score))
         }
 
