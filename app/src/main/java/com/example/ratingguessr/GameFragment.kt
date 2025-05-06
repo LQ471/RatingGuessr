@@ -1,8 +1,6 @@
 package com.example.ratingguessr
 
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -81,7 +78,6 @@ class GameFragment : Fragment() {
         }
 
         gameViewModel.score.observe(viewLifecycleOwner) {
-            // scoreTextView.text = String.format("%.2f", it)
             scoreTextView.text = gameViewModel.getFormattedScore()
         }
 
@@ -90,10 +86,10 @@ class GameFragment : Fragment() {
             fetchMovies()
         }
 
-
         gameViewModel.gameOver.observe(viewLifecycleOwner) { gameOver ->
             if (gameOver == true && gameViewModel.shouldNavigateToGameOver()) {
                 findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
+                gameViewModel.resetGame()
             }
         }
 
@@ -108,6 +104,12 @@ class GameFragment : Fragment() {
         val originalBackground = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
 
         gameViewModel.selectedMovie.observe(viewLifecycleOwner) { selectedMovie ->
+            movie1ImageButton.isClickable = false
+            movie2ImageButton.isClickable = false
+            movie1RatingTextView.visibility = View.VISIBLE
+            movie2RatingTextView.visibility = View.VISIBLE
+            enableButton(nextButton)
+
             when (selectedMovie) {
                 1 -> {
                     movie1ImageButton.background = yellowBorder
@@ -117,57 +119,66 @@ class GameFragment : Fragment() {
                     movie2ImageButton.background = yellowBorder
                     movie1ImageButton.background = originalBackground
                 } else -> {
+                    disableButton(nextButton)
                     movie1ImageButton.background = originalBackground
                     movie2ImageButton.background = originalBackground
+                    movie1ImageButton.isClickable = true
+                    movie2ImageButton.isClickable = true
+                    movie1RatingTextView.visibility = View.INVISIBLE
+                    movie2RatingTextView.visibility = View.INVISIBLE
+                    movie1RatingTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
+                    movie2RatingTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
                 }
+            }
+        }
+
+        // Updates UI based on correct/incorrect answer
+        gameViewModel.answerResult.observe(viewLifecycleOwner) { result ->
+            val selectedMovie = gameViewModel.selectedMovie.value
+
+            when (result) {
+                is GameViewModel.AnswerResult.Correct -> {
+                    enableButton(nextButton)
+                    when (selectedMovie) {
+                        1 -> movie2RatingTextView.setTextColor(redColor)
+                        2 -> movie1RatingTextView.setTextColor(redColor)
+                    }
+                }
+                is GameViewModel.AnswerResult.Incorrect -> {
+                    disableButton(nextButton)
+                    when (selectedMovie) {
+                        1 -> {
+                            movie1RatingTextView.setTextColor(redColor)
+                            movie1ImageButton.background = redBorder
+                        }
+                        2 -> {
+                            movie2RatingTextView.setTextColor(redColor)
+                            movie2ImageButton.background = redBorder
+                        }
+                    }
+
+                }
+                null -> {}
             }
         }
 
         fun onMovieSelected(selectedMovie: Int) {
             gameViewModel.setSelectedMovie(selectedMovie)
-
-            movie1ImageButton.isClickable = false
-            movie2ImageButton.isClickable = false
             gameViewModel.stopTimer()
 
             // Get the current progress (remaining time) and update the timeBar
-            //gameViewModel.getTimerProgress(timeBar)
             val timeBonus = gameViewModel.getTimerFraction()
 
             // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
             // gameViewModel.evaluateAnswer()
             gameViewModel.evaluateAnswer(timeBonus)
 
-            movie1RatingTextView.visibility = View.VISIBLE
-            movie2RatingTextView.visibility = View.VISIBLE
-
-            when (val result = gameViewModel.answerResult.value) {
-                is GameViewModel.AnswerResult.Correct -> {
-                    enableButton(nextButton)
-                    // Mark the incorrect one in red
-                    if (selectedMovie == 1) {
-                        movie2RatingTextView.setTextColor(redColor)
-                    } else {
-                        movie1RatingTextView.setTextColor(redColor)
-                    }
+            if (gameViewModel.answerResult.value is GameViewModel.AnswerResult.Incorrect) {
+                lifecycleScope.launch {
+                    delay(2000L)
+                    gameViewModel.triggerGameOver()
+                    gameViewModel.selectedMovie.value = null
                 }
-                is GameViewModel.AnswerResult.Incorrect -> {
-                    disableButton(nextButton)
-                    if (selectedMovie == 1) {
-                        movie1RatingTextView.setTextColor(redColor)
-                        movie1ImageButton.background = redBorder
-                    } else {
-                        movie2RatingTextView.setTextColor(redColor)
-                        movie2ImageButton.background = redBorder
-                    }
-
-                    lifecycleScope.launch {
-                        delay(2000L)
-                        gameViewModel.triggerGameOver()
-                    }
-
-                }
-                null -> return
             }
         }
 
@@ -187,15 +198,11 @@ class GameFragment : Fragment() {
         }
 
         nextButton.setOnClickListener {
-            disableButton(nextButton)
             gameViewModel.resetAnswer()
             gameViewModel.startTimer()
-            resetUI(movie1RatingTextView, movie2RatingTextView, movie1ImageButton, movie2ImageButton, nextButton)
+            gameViewModel.selectedMovie.value = null
             fetchMovies()
         }
-
-        // Initially, set Next button to be unavailable
-        disableButton(nextButton)
     }
 
     private fun fetchMovies() {
@@ -210,17 +217,5 @@ class GameFragment : Fragment() {
     private fun enableButton(button: Button) {
         button.alpha = 1f // 100% opacity
         button.isClickable = true
-    }
-
-    private fun resetUI(movie1Rating:TextView, movie2Rating: TextView, movie1Button: ImageButton, movie2Button: ImageButton, nextButton: Button) {
-        disableButton(nextButton)
-        movie1Rating.visibility = View.INVISIBLE
-        movie2Rating.visibility = View.INVISIBLE
-        movie1Rating.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
-        movie2Rating.setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
-        movie1Button.isClickable = true
-        movie2Button.isClickable = true
-        movie1Button.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
-        movie2Button.background = ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Blue).toDrawable()
     }
 }

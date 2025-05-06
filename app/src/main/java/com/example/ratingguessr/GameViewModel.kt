@@ -85,17 +85,18 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             _answerResult.value = AnswerResult.Incorrect
         }
+
     }
 
     fun setSelectedMovie(index: Int) {
         _selectedMovie.value = index
     }
 
-    fun addToScore(base: Float = 1f) {
+    private fun addToScore(base: Float = 1f) {
         _score.value = (_score.value ?: 0f) + base
     }
 
-    fun resetScore() {
+    private fun resetScore() {
         _score.value = 0f
     }
 
