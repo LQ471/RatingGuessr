@@ -45,11 +45,6 @@ class GameFragment : Fragment() {
         val timeBar = view.findViewById<View>(R.id.timeBar)
         val exitButton = view.findViewById<View>(R.id.ExitButton)
 
-        exitButton.setOnClickListener {
-            gameViewModel.resetGame()
-            view.findNavController().navigate(R.id.action_gameFragment_to_introFragment)
-        }
-
         //  Layout elements for movie on left side
         val movie1ImageButton = view.findViewById<ImageButton>(R.id.imageButtonMovie1)
         val movie1TitleTextView = view.findViewById<TextView>(R.id.titleMovie1)
@@ -61,6 +56,16 @@ class GameFragment : Fragment() {
         val movie2TitleTextView = view.findViewById<TextView>(R.id.titleMovie2)
         val movie2YearTextView = view.findViewById<TextView>(R.id.releaseYearMovie2)
         val movie2RatingTextView = view.findViewById<TextView>(R.id.ratingMovie2)
+
+        exitButton.setOnClickListener {
+            gameViewModel.resetGame()
+            view.findNavController().navigate(R.id.action_gameFragment_to_introFragment)
+        }
+
+        // Triggering fetching of the data in the viewModel
+        if (gameViewModel.moviePair.value == null) {
+            fetchMovies()
+        }
 
         // Setting the layout through API calls in the ViewModel
         gameViewModel.moviePair.observe(viewLifecycleOwner) { pair ->
@@ -81,15 +86,9 @@ class GameFragment : Fragment() {
             scoreTextView.text = gameViewModel.getFormattedScore()
         }
 
-        // Triggering fetching of the data in the viewModel
-        if (gameViewModel.moviePair.value == null) {
-            fetchMovies()
-        }
-
         gameViewModel.gameOver.observe(viewLifecycleOwner) { gameOver ->
             if (gameOver == true && gameViewModel.shouldNavigateToGameOver()) {
                 findNavController().navigate(R.id.action_gameFragment_to_gameOverPopUp)
-                gameViewModel.resetGame()
             }
         }
 
@@ -135,7 +134,7 @@ class GameFragment : Fragment() {
         // Updates UI based on correct/incorrect answer
         gameViewModel.answerResult.observe(viewLifecycleOwner) { result ->
             val selectedMovie = gameViewModel.selectedMovie.value
-
+            gameViewModel.stopTimer()
             when (result) {
                 is GameViewModel.AnswerResult.Correct -> {
                     enableButton(nextButton)
@@ -146,6 +145,12 @@ class GameFragment : Fragment() {
                 }
                 is GameViewModel.AnswerResult.Incorrect -> {
                     disableButton(nextButton)
+                    lifecycleScope.launch {
+                        delay(2000L)
+                        if (isAdded && findNavController().currentDestination?.id == R.id.gameFragment) {
+                            gameViewModel.triggerGameOver()
+                        }
+                    }
                     when (selectedMovie) {
                         1 -> {
                             movie1RatingTextView.setTextColor(redColor)
@@ -162,24 +167,22 @@ class GameFragment : Fragment() {
             }
         }
 
+        timeBar.post {
+            timeBar.pivotX = 0f  // Left edge of the view
+            timeBar.pivotY = timeBar.height / 2f  // Center vertically
+
+            // Only start the timer if there is not a current game ongoing (i.e. a movie has been selected)
+            gameViewModel.startTimer()  // start the timer *after* pivot is correctly set
+        }
+
         fun onMovieSelected(selectedMovie: Int) {
             gameViewModel.setSelectedMovie(selectedMovie)
-            gameViewModel.stopTimer()
 
             // Get the current progress (remaining time) and update the timeBar
             val timeBonus = gameViewModel.getTimerFraction()
 
             // Sets AnswerResult to Correct or Incorrect in ViewModel. Updates UI through observing this value.
-            // gameViewModel.evaluateAnswer()
             gameViewModel.evaluateAnswer(timeBonus)
-
-            if (gameViewModel.answerResult.value is GameViewModel.AnswerResult.Incorrect) {
-                lifecycleScope.launch {
-                    delay(2000L)
-                    gameViewModel.triggerGameOver()
-                    gameViewModel.selectedMovie.value = null
-                }
-            }
         }
 
         movie1ImageButton.setOnClickListener {
@@ -188,13 +191,6 @@ class GameFragment : Fragment() {
 
         movie2ImageButton.setOnClickListener {
             onMovieSelected(2)
-        }
-
-        timeBar.post {
-            timeBar.pivotX = 0f  // Left edge of the view
-            timeBar.pivotY = timeBar.height / 2f  // Center vertically
-
-            gameViewModel.startTimer()  // start the timer *after* pivot is correctly set
         }
 
         nextButton.setOnClickListener {

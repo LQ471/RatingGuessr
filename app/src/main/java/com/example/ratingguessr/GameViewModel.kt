@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ratingguessr.networking.Movie
 import android.util.Log
-import android.view.View
 
 // Has to be an AndroidViewModel to get the context for the SimpleSQL which requires activity context
 class GameViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,9 +15,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val totalTime = 10000L // 10 seconds
     private val interval = 30L // update every 100ms
     private var remainingTime: Long = totalTime
-    private var isTimerRunning: Boolean = false
+     var isTimerRunning: Boolean = false
 
-    // Class to handle evaluation
+    // Class to handle evaluation of answer
     sealed class AnswerResult {
         data object Correct : AnswerResult()
         data object Incorrect : AnswerResult()
