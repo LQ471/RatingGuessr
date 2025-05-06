@@ -37,7 +37,7 @@ class HighScoreListFragment : Fragment() {
 
         scores.forEachIndexed { index, score ->
             val scoreView = TextView(requireContext()).apply {
-                text = "${index + 1}. ${score.name}: ${score.score}"
+                text = "${index + 1}. ${score.name}: ${String.format("%.2f", score)}"
                 textSize = 20f
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.RatingGuessr_Yellow))
                 gravity = Gravity.CENTER
