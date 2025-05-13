@@ -128,16 +128,6 @@
         app:layout_constraintBottom_toTopOf="@+id/imageButtonMovie2"
         app:layout_constraintEnd_toEndOf="@+id/imageButtonMovie2"
         app:layout_constraintStart_toStartOf="@+id/imageButtonMovie2" />
-    <!--
-        <Button
-            android:id="@+id/AnswerButton"
-            style="@style/MainButton"
-            android:layout_marginBottom="16dp"
-            android:text="@string/answer_button"
-            app:layout_constraintBottom_toTopOf="@id/NextButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-     -->
 
     <Button
         android:id="@+id/NextButton"
